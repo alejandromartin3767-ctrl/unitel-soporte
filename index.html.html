@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f172a">
+<title>Ingeniería Unitel</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563eb'/%3E%3Cg stroke='%23fff' stroke-width='2' stroke-linecap='round' fill='none'%3E%3Cpath d='M8 13.5C9.8 10.8 12.7 9 16 9s6.2 1.8 8 4.5'/%3E%3Cpath d='M10.5 16C12 14 13.9 13 16 13s4 1 5.5 3'/%3E%3Cpath d='M13 18.5C14 17.3 14.9 17 16 17s2 .3 3 1.5'/%3E%3C/g%3E%3Ccircle cx='16' cy='22' r='2' fill='%2322d3ee'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:transparent;
+  --surface:rgba(10,20,40,0.82);
+  --surface2:rgba(8,16,32,0.72);
+  --border:rgba(56,189,248,0.14);
+  --border2:rgba(56,189,248,0.24);
+  --text:#e2eaf4;--text2:#94a3b8;--text3:#4a6080;
+  --blue:#2563eb;--blue-bg:rgba(37,99,235,0.2);--blue-txt:#93c5fd;
+  --amber:#d97706;--amber-bg:rgba(217,119,6,0.2);--amber-txt:#fcd34d;
+  --green:#16a34a;--green-bg:rgba(22,163,74,0.2);--green-txt:#86efac;
+  --red:#dc2626;--red-bg:rgba(220,38,38,0.2);--red-txt:#fca5a5;
+  --purple:#7c3aed;--purple-bg:rgba(124,58,237,0.2);--purple-txt:#c4b5fd;
+  --cyan:#0891b2;--orange:#ea580c;
+  --r:14px;--r-sm:9px;
+  --shadow:0 1px 6px rgba(0,0,0,0.4),0 1px 2px rgba(0,0,0,0.25);
+  --shadow-md:0 4px 20px rgba(0,0,0,0.5);
+}
+body{background:#060d1a;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
+#app-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#app-screen{position:relative;z-index:1}
+
+/* LOGIN */
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(135deg,#eff6ff 0%,#f8f9fc 50%,#f0fdf4 100%)}
+.login-logo{width:72px;height:72px;background:var(--blue);border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 8px 24px rgba(37,99,235,.3)}
+.login-logo i{font-size:36px;color:#fff}
+.login-title{font-size:26px;font-weight:800;margin-bottom:4px;text-align:center;color:var(--text)}
+.login-sub{font-size:14px;color:var(--text3);margin-bottom:36px;text-align:center}
+.login-card{width:100%;max-width:360px;background:var(--surface);border-radius:20px;padding:24px;box-shadow:var(--shadow-md);border:1px solid var(--border)}
+/* login-error → see #login-screen styles */
+
+/* TOPBAR */
+.topbar{background:rgba(6,13,26,0.88);border-bottom:1px solid rgba(56,189,248,0.15);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.4);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;background:var(--blue);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(37,99,235,.3)}
+.logo-icon i{font-size:18px;color:#fff}
+.logo-text{font-size:17px;font-weight:800;letter-spacing:-0.3px;color:var(--text)}
+.logo-text span{color:var(--blue)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.badge-count{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px}
+.logout-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:20px;display:flex;align-items:center}
+
+/* TABS */
+.tabs{background:rgba(6,13,26,0.85);border-bottom:1px solid rgba(56,189,248,0.12);display:flex;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);position:sticky;top:57px;z-index:99}
+.tab{flex:1;padding:12px 4px 10px;text-align:center;font-size:10px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:.5px}
+.tab i{font-size:20px}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* SCREENS */
+.screen{display:none;padding-bottom:110px}
+.screen.active{display:block}
+
+/* ===== DASHBOARD CUADRO DE MANDO ===== */
+.dash-header{padding:16px 14px 8px;font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px}
+
+/* GAUGE CIRCLES */
+.gauges-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:8px 14px 14px}
+.gauge-card{background:rgba(10,20,40,0.8);border-radius:20px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid rgba(56,189,248,0.13);box-shadow:0 2px 12px rgba(0,0,0,0.35);backdrop-filter:blur(8px)}
+.gauge-ring{position:relative;width:90px;height:90px}
+.gauge-ring svg{width:90px;height:90px;transform:rotate(-90deg)}
+.gauge-ring .track{fill:none;stroke-width:8;stroke:rgba(30,58,95,0.6)}
+.gauge-ring .fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dasharray .8s ease}
+.gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gauge-num{font-size:26px;font-weight:800;line-height:1;letter-spacing:-1px}
+.gauge-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;text-align:center;margin-top:2px}
+.gauge-sub{font-size:11px;color:var(--text3);font-weight:500}
+
+/* BAR CHART */
+.chart-card{background:rgba(10,20,40,0.8);border-radius:20px;margin:0 14px 12px;border:1px solid rgba(56,189,248,0.13);padding:16px;box-shadow:0 2px 12px rgba(0,0,0,0.35);backdrop-filter:blur(8px)}
+.chart-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bar-row:last-child{margin-bottom:0}
+.bar-label{font-size:12px;color:var(--text2);font-weight:600;min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:10px;background:rgba(6,13,26,0.6);border-radius:5px;overflow:hidden;border:1px solid rgba(56,189,248,0.1)}
+.bar-fill{height:100%;border-radius:5px;transition:width .8s ease}
+.bar-val{font-size:12px;font-weight:700;min-width:20px;text-align:right}
+
+/* STATUS PILLS ROW */
+.status-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 12px 12px}
+.status-row::-webkit-scrollbar{display:none}
+.status-pill-card{flex:1;background:rgba(10,20,40,0.8);border-radius:14px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;border:1px solid rgba(56,189,248,0.13);box-shadow:0 2px 12px rgba(0,0,0,0.35);backdrop-filter:blur(8px)}
+.spill-num{font-size:24px;font-weight:800;letter-spacing:-1px;line-height:1}
+.spill-lbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.3px}
+.spill-dot{width:8px;height:8px;border-radius:50%;margin-bottom:2px}
+
+/* SECTION */
+.sec-title{padding:12px 16px 6px;font-size:11px;font-weight:700;color:#38bdf8;text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;justify-content:space-between;border-left:2px solid rgba(56,189,248,0.3);margin-left:12px;padding-left:10px}
+.sec-count{background:rgba(56,189,248,0.1);color:#38bdf8;font-size:11px;padding:2px 9px;border-radius:20px;border:1px solid rgba(56,189,248,0.2)}
+
+/* TICKET CARD */
+.tcard{background:rgba(10,20,40,0.8);margin:0 12px 10px;border:1px solid rgba(56,189,248,0.13);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:0 2px 12px rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.tcard:active{transform:scale(.98);box-shadow:var(--shadow-md)}
+.tcard-head{padding:13px 14px 10px;border-bottom:1px solid var(--border)}
+.tcard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.tcard-id{font-size:11px;color:var(--text3);font-family:monospace;font-weight:600}
+.pill{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px}
+.p-nuevo{background:var(--blue-bg);color:var(--blue-txt);border:1px solid #bfdbfe}
+.p-asignado{background:var(--amber-bg);color:var(--amber-txt);border:1px solid #fde68a}
+.p-proceso{background:var(--purple-bg);color:var(--purple-txt);border:1px solid #ddd6fe}
+.p-cerrado{background:var(--green-bg);color:var(--green-txt);border:1px solid #bbf7d0}
+.tcard-name{font-size:17px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.tcard-falla{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:5px}
+.falla-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;box-shadow:0 0 4px rgba(217,119,6,.4)}
+.tcard-body{padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,13,26,0.5)}
+.tcard-loc{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:3px}
+.tcard-loc i{font-size:13px}
+.tcard-tec{display:flex;align-items:center;gap:5px}
+.avatar-sm{width:22px;height:22px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tcard-tec-name{font-size:12px;color:var(--text2);font-weight:600}
+.pri-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;margin-left:4px}
+.pri-urgente{background:var(--red-bg);color:var(--red-txt)}
+.pri-alta{background:var(--amber-bg);color:var(--amber-txt)}
+
+/* SEARCH */
+.search-wrap{padding:12px 12px 6px}
+.search-box{display:flex;align-items:center;gap:8px;background:rgba(10,20,40,0.8);border:1.5px solid rgba(56,189,248,0.15);border-radius:20px;padding:0 14px;box-shadow:0 2px 8px rgba(0,0,0,0.3);backdrop-filter:blur(8px)}
+.search-box i{font-size:16px;color:var(--text3)}
+.search-box input{border:none;background:transparent;color:var(--text);font-size:15px;padding:10px 0;outline:none;width:100%}
+.search-box input::placeholder{color:var(--text3)}
+.chips{display:flex;gap:7px;padding:6px 12px 10px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid rgba(56,189,248,0.18);color:var(--text2);cursor:pointer;background:rgba(10,20,40,0.7);transition:all .15s;box-shadow:0 1px 4px rgba(0,0,0,0.3);backdrop-filter:blur(6px)}
+.chip.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+
+/* FAB */
+.fab{position:fixed;bottom:28px;right:20px;background:var(--blue);border:none;color:#fff;border-radius:16px;width:56px;height:56px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:200;box-shadow:0 4px 20px rgba(37,99,235,.4);transition:all .2s}
+.fab:active{transform:scale(.9);box-shadow:0 2px 10px rgba(37,99,235,.3)}
+.fab i{font-size:26px;color:#fff}
+
+/* OVERLAY */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;align-items:flex-end}
+.overlay.open{display:flex}
+.sheet{background:rgba(8,16,34,0.96);border-radius:24px 24px 0 0;width:100%;max-height:92vh;overflow-y:auto;padding:20px 16px 32px;box-shadow:0 -4px 40px rgba(0,0,0,0.6);border-top:1px solid rgba(56,189,248,0.18);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.handle{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
+.sheet-title{font-size:18px;font-weight:800;margin-bottom:16px;color:var(--text)}
+
+/* FORM */
+.fg{margin-bottom:13px}
+.flabel{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px;display:block}
+.finput,.fselect,.ftextarea{width:100%;background:rgba(6,13,26,0.8);border:1.5px solid rgba(56,189,248,0.15);border-radius:var(--r-sm);color:var(--text);font-size:15px;padding:11px 13px;outline:none;transition:all .2s;font-family:inherit;box-shadow:inset 0 1px 3px rgba(0,0,0,.3)}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.fselect{-webkit-appearance:none}
+.fselect option{background:var(--surface2);color:var(--text)}
+.ftextarea{min-height:80px;resize:vertical}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* FOTO */
+.foto-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:18px;text-align:center;cursor:pointer;background:var(--surface2)}
+.foto-zone i{font-size:30px;color:var(--text3);display:block;margin-bottom:5px}
+.foto-zone p{font-size:13px;color:var(--text3);font-weight:500}
+.foto-zone small{font-size:11px;color:var(--text3)}
+.foto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.fthumb{aspect-ratio:1;border-radius:var(--r-sm);overflow:hidden;position:relative;background:var(--surface2)}
+.fthumb img{width:100%;height:100%;object-fit:cover}
+.fdel{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.75);border:none;color:#fff;border-radius:50%;width:19px;height:19px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
+
+/* BUTTONS */
+.btn{width:100%;padding:14px;border-radius:var(--r-sm);border:none;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn:active{opacity:.8}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.3)}
+.btn-outline{background:transparent;color:var(--text2);border:1.5px solid var(--border);margin-top:8px}
+.btn-green{background:var(--green-bg);color:var(--green-txt);border:1px solid rgba(34,197,94,.3)}
+.btn-sm{width:auto;padding:8px 14px;font-size:13px;border-radius:var(--r-sm);margin-right:8px}
+
+/* DETAIL */
+.detail-top{background:rgba(6,13,26,0.9);padding:14px 16px;border-bottom:1px solid rgba(56,189,248,0.12);display:flex;align-items:center;gap:10px}
+.back-btn{background:rgba(10,20,40,0.8);border:1.5px solid rgba(56,189,248,0.18);border-radius:8px;padding:7px 12px;display:flex;align-items:center;gap:3px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.3)}
+.back-btn i{font-size:15px}
+.detail-section{background:rgba(10,20,40,0.82);margin:10px 12px;border:1px solid rgba(56,189,248,0.13);border-radius:var(--r);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.35);backdrop-filter:blur(8px)}
+.ds-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:11px 14px;background:rgba(6,13,26,0.5);border-bottom:1px solid rgba(56,189,248,0.1)}
+.ds-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 14px;border-bottom:1px solid var(--border)}
+.ds-row:last-child{border:none}
+.ds-key{font-size:13px;color:var(--text3);font-weight:500;flex-shrink:0;margin-right:10px}
+.ds-val{font-size:13px;color:var(--text);font-weight:600;text-align:right}
+.hist-item{padding:11px 14px;border-bottom:1px solid var(--border)}
+.hist-item:last-child{border:none}
+.hist-date{font-size:11px;color:var(--text3);font-weight:600;margin-bottom:3px}
+.hist-note{font-size:13px;color:var(--text2);line-height:1.5}
+.hist-photos{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.hphoto{width:56px;height:56px;border-radius:var(--r-sm);overflow:hidden}
+.hphoto img{width:100%;height:100%;object-fit:cover}
+
+/* TECNICOS */
+.tec-card{background:rgba(10,20,40,0.8);margin:0 12px 10px;border:1px solid rgba(56,189,248,0.13);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,0.35);backdrop-filter:blur(8px)}
+.tec-avatar{width:46px;height:46px;border-radius:50%;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tec-name{font-size:15px;font-weight:700;margin-bottom:2px;color:var(--text)}
+.tec-meta{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.online-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block}
+
+/* ZONAS */
+.zona-card{background:rgba(10,20,40,0.8);margin:0 12px 8px;border:1px solid rgba(56,189,248,0.13);border-radius:var(--r);padding:13px;box-shadow:0 2px 12px rgba(0,0,0,0.35);backdrop-filter:blur(8px)}
+.zona-bar{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:7px}
+.zona-fill{height:100%;border-radius:4px}
+
+/* EMPTY + LOADING */
+.empty{text-align:center;padding:48px 20px;color:var(--text3)}
+.empty i{font-size:48px;display:block;margin-bottom:10px}
+.empty p{font-size:14px;font-weight:500}
+.loading{text-align:center;padding:32px;color:var(--text3);font-size:14px}
+.loading i{font-size:24px;display:block;margin-bottom:8px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOAST */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(12px);background:rgba(10,20,40,0.95);border:1px solid rgba(56,189,248,0.3);color:#e2eaf4;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .28s;white-space:nowrap;backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.pri-chips{display:flex;gap:8px}
+.pri-chip{flex:1;text-align:center;padding:10px;border-radius:var(--r-sm);border:1px solid var(--border2);font-size:13px;font-weight:600;cursor:pointer;background:var(--surface2);color:var(--text2);transition:all .15s}
+.pri-chip.active{border-color:var(--blue);background:var(--blue-bg);color:var(--blue-txt)}
+input[type=file]{display:none}
+</style>
+</head>
+<body>
+
+<!-- LOGIN STYLES -->
+<style>
+#login-screen {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #060d1a;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animated fiber optic canvas background */
+#fiber-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Dark overlay gradient */
+#login-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 60% 50%, rgba(6,13,26,0.25) 0%, rgba(6,13,26,0.72) 100%);
+  z-index: 1;
+}
+
+/* Card */
+.login-panel {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 420px;
+  margin: 24px;
+  background: rgba(8, 18, 36, 0.82);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 20px;
+  padding: 40px 36px 36px;
+  box-shadow: 0 0 60px rgba(37,99,235,0.18), 0 24px 64px rgba(0,0,0,0.5);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Logo area */
+.login-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 32px;
+}
+.login-logo-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(37,99,235,0.5), 0 4px 12px rgba(0,0,0,0.4);
+  flex-shrink: 0;
+}
+.login-brand {
+  font-family: 'Inter', sans-serif;
+}
+.login-brand-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #f1f5f9;
+  letter-spacing: -0.4px;
+  line-height: 1.1;
+}
+.login-brand-name span { color: #38bdf8; }
+.login-brand-sub {
+  font-size: 11px;
+  color: #475569;
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* Divider */
+.login-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(56,189,248,0.2), transparent);
+  margin-bottom: 28px;
+}
+
+/* Welcome text */
+.login-welcome {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 6px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.5px;
+}
+.login-sub-text {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 28px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Error */
+.login-error {
+  background: rgba(220,38,38,0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(220,38,38,0.3);
+  border-radius: 9px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  display: none;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Fields */
+.login-field {
+  margin-bottom: 16px;
+}
+.login-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 7px;
+  font-family: 'Inter', sans-serif;
+}
+.login-input {
+  width: 100%;
+  background: rgba(15, 30, 55, 0.8);
+  border: 1.5px solid rgba(56, 189, 248, 0.15);
+  border-radius: 10px;
+  color: #f1f5f9;
+  font-size: 15px;
+  padding: 12px 14px;
+  outline: none;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+}
+.login-input::placeholder { color: #334155; }
+.login-input:focus {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(15, 30, 55, 0.95);
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.1), inset 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Button */
+.login-btn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(37,99,235,0.4), 0 2px 8px rgba(0,0,0,0.3);
+  letter-spacing: 0.2px;
+}
+.login-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0e7490 100%);
+  box-shadow: 0 6px 28px rgba(37,99,235,0.55);
+  transform: translateY(-1px);
+}
+.login-btn:active { transform: scale(.98); opacity: .9; }
+
+/* Footer */
+.login-footer {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 11px;
+  color: #334155;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Stat badges at bottom of card */
+.login-stats {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+  border-top: 1px solid rgba(56,189,248,0.1);
+  padding-top: 18px;
+}
+.lstat {
+  flex: 1;
+  text-align: center;
+}
+.lstat-num {
+  font-size: 18px;
+  font-weight: 800;
+  color: #38bdf8;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.5px;
+}
+.lstat-lbl {
+  font-size: 10px;
+  color: #475569;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-top: 2px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Glowing dot decoration */
+.glow-dot {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+.gd1 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%); top: -80px; right: -60px; }
+.gd2 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(8,145,178,0.12) 0%, transparent 70%); bottom: -60px; left: -40px; }
+</style>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <canvas id="fiber-canvas"></canvas>
+  <div class="glow-dot gd1"></div>
+  <div class="glow-dot gd2"></div>
+
+  <div class="login-panel">
+    <!-- Logo -->
+    <div class="login-logo-row">
+      <div class="login-logo-icon">
+        <svg width="26" height="26" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24">
+          <path d="M1.5 8.5C5 4.5 9.2 2.5 12 2.5s7 2 10.5 6"/>
+          <path d="M4.5 11.5C7 8.5 9.5 7 12 7s5 1.5 7.5 4.5"/>
+          <path d="M7.5 14.5C9 12.5 10.5 11.5 12 11.5s3 1 4.5 3"/>
+          <circle cx="12" cy="18.5" r="1.5" fill="#22d3ee" stroke="none"/>
+        </svg>
+      </div>
+      <div class="login-brand">
+        <div class="login-brand-name">Ingeniería <span>Unitel</span></div>
+        <div class="login-brand-sub">Sistema de gestión ISP</div>
+      </div>
+    </div>
+
+    <div class="login-divider"></div>
+
+    <div class="login-welcome">Bienvenido</div>
+    <div class="login-sub-text">Inicia sesión para acceder al panel</div>
+
+    <div class="login-error" id="login-error">Correo o contraseña incorrectos</div>
+
+    <div class="login-field">
+      <label class="login-label">Correo electrónico</label>
+      <input class="login-input" id="lemail" type="email" placeholder="usuario@unitel.mx">
+    </div>
+    <div class="login-field">
+      <label class="login-label">Contraseña</label>
+      <input class="login-input" id="lpass" type="password" placeholder="••••••••">
+    </div>
+
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">
+      <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Iniciar sesión
+    </button>
+
+    <div class="login-stats">
+      <div class="lstat"><div class="lstat-num">24/7</div><div class="lstat-lbl">Soporte</div></div>
+      <div class="lstat"><div class="lstat-num" id="ls-tec">—</div><div class="lstat-lbl">Técnicos</div></div>
+      <div class="lstat"><div class="lstat-num" id="ls-zon">16</div><div class="lstat-lbl">Zonas</div></div>
+    </div>
+
+    <div class="login-footer">¿Problemas para acceder? Contacta a soporte técnico</div>
+  </div>
+</div>
+
+<script>
+// ── FIBER OPTIC CANVAS ANIMATION ──────────────────────────────
+(function(){
+  const canvas = document.getElementById('fiber-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles, fibers;
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    init();
+  }
+
+  // Fiber strands
+  function makeFiber(){
+    const x = Math.random() * W;
+    const y = Math.random() * H;
+    const angle = Math.random() * Math.PI * 2;
+    const len = 80 + Math.random() * 180;
+    const speed = 0.2 + Math.random() * 0.5;
+    const colors = ['#38bdf8','#2563eb','#0891b2','#7c3aed','#06b6d4','#3b82f6'];
+    return {
+      x, y, angle, len, speed,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      alpha: 0.08 + Math.random() * 0.25,
+      width: 0.5 + Math.random() * 1.5,
+      pulse: Math.random() * Math.PI * 2,
+      pulseSpeed: 0.02 + Math.random() * 0.03,
+      glowLen: 0.1 + Math.random() * 0.4, // glowing head fraction
+    };
+  }
+
+  // Floating particles (data packets)
+  function makeParticle(){
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: 0.5 + Math.random() * 2,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      alpha: 0.2 + Math.random() * 0.5,
+      color: Math.random() > 0.5 ? '#38bdf8' : '#2563eb',
+    };
+  }
+
+  function init(){
+    fibers = Array.from({length: 60}, makeFiber);
+    particles = Array.from({length: 80}, makeParticle);
+  }
+
+  function drawFiber(f){
+    f.pulse += f.pulseSpeed;
+    // Drift slowly
+    f.x += Math.cos(f.angle) * f.speed * 0.3;
+    f.y += Math.sin(f.angle) * f.speed * 0.3;
+    if(f.x < -200) f.x = W + 100;
+    if(f.x > W + 200) f.x = -100;
+    if(f.y < -200) f.y = H + 100;
+    if(f.y > H + 200) f.y = -100;
+
+    const ex = f.x + Math.cos(f.angle) * f.len;
+    const ey = f.y + Math.sin(f.angle) * f.len;
+
+    // Main strand
+    const grad = ctx.createLinearGradient(f.x, f.y, ex, ey);
+    grad.addColorStop(0, 'transparent');
+    grad.addColorStop(Math.max(0, 1 - f.glowLen - 0.1), 'transparent');
+    grad.addColorStop(Math.max(0, 1 - f.glowLen), f.color + Math.floor(f.alpha * 255 * 0.4).toString(16).padStart(2,'0'));
+    grad.addColorStop(1, f.color + Math.floor(f.alpha * 255).toString(16).padStart(2,'0'));
+
+    ctx.beginPath();
+    ctx.moveTo(f.x, f.y);
+    ctx.lineTo(ex, ey);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = f.width;
+    ctx.stroke();
+
+    // Glowing head
+    const glowX = f.x + Math.cos(f.angle) * f.len;
+    const glowY = f.y + Math.sin(f.angle) * f.len;
+    const pulse = 0.7 + 0.3 * Math.sin(f.pulse);
+    const glow = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, 6 * pulse);
+    glow.addColorStop(0, f.color + 'cc');
+    glow.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(glowX, glowY, 6 * pulse, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+  }
+
+  function drawParticle(p){
+    p.x += p.vx;
+    p.y += p.vy;
+    if(p.x < 0) p.x = W;
+    if(p.x > W) p.x = 0;
+    if(p.y < 0) p.y = H;
+    if(p.y > H) p.y = 0;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color + Math.floor(p.alpha * 255).toString(16).padStart(2,'0');
+    ctx.fill();
+  }
+
+  // Draw subtle grid
+  function drawGrid(){
+    ctx.strokeStyle = 'rgba(30,58,95,0.25)';
+    ctx.lineWidth = 0.5;
+    const step = 60;
+    for(let x = 0; x < W; x += step){
+      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+    }
+    for(let y = 0; y < H; y += step){
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    }
+  }
+
+  function animate(){
+    ctx.clearRect(0, 0, W, H);
+    // Background
+    ctx.fillStyle = '#060d1a';
+    ctx.fillRect(0, 0, W, H);
+    drawGrid();
+    fibers.forEach(drawFiber);
+    particles.forEach(drawParticle);
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  animate();
+})();
+</script>
+
+<!-- GLOBAL BACKGROUND CANVAS -->
+<canvas id="app-canvas"></canvas>
+<script>
+(function(){
+  const canvas = document.getElementById("app-canvas");
+  const ctx = canvas.getContext("2d");
+  let W, H, fibers, particles;
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+    init();
+  }
+  function makeFiber(){
+    const colors=["#38bdf8","#2563eb","#0891b2","#7c3aed","#06b6d4","#3b82f6"];
+    return{x:Math.random()*W,y:Math.random()*H,angle:Math.random()*Math.PI*2,len:80+Math.random()*180,speed:0.15+Math.random()*0.35,color:colors[Math.floor(Math.random()*colors.length)],alpha:0.06+Math.random()*0.2,width:0.4+Math.random()*1.4,pulse:Math.random()*Math.PI*2,pulseSpeed:0.015+Math.random()*0.025,glowLen:0.1+Math.random()*0.4};
+  }
+  function makeParticle(){
+    return{x:Math.random()*W,y:Math.random()*H,r:0.4+Math.random()*1.8,vx:(Math.random()-.5)*0.35,vy:(Math.random()-.5)*0.35,alpha:0.15+Math.random()*0.4,color:Math.random()>.5?"#38bdf8":"#2563eb"};
+  }
+  function init(){
+    fibers=Array.from({length:55},makeFiber);
+    particles=Array.from({length:70},makeParticle);
+  }
+  function drawFiber(f){
+    f.pulse+=f.pulseSpeed;
+    f.x+=Math.cos(f.angle)*f.speed*0.25;
+    f.y+=Math.sin(f.angle)*f.speed*0.25;
+    if(f.x<-200)f.x=W+100;if(f.x>W+200)f.x=-100;
+    if(f.y<-200)f.y=H+100;if(f.y>H+200)f.y=-100;
+    const ex=f.x+Math.cos(f.angle)*f.len;
+    const ey=f.y+Math.sin(f.angle)*f.len;
+    const grad=ctx.createLinearGradient(f.x,f.y,ex,ey);
+    grad.addColorStop(0,"transparent");
+    grad.addColorStop(Math.max(0,1-f.glowLen-0.1),"transparent");
+    grad.addColorStop(Math.max(0,1-f.glowLen),f.color+Math.floor(f.alpha*255*0.35).toString(16).padStart(2,"0"));
+    grad.addColorStop(1,f.color+Math.floor(f.alpha*255).toString(16).padStart(2,"0"));
+    ctx.beginPath();ctx.moveTo(f.x,f.y);ctx.lineTo(ex,ey);
+    ctx.strokeStyle=grad;ctx.lineWidth=f.width;ctx.stroke();
+    const pulse=0.7+0.3*Math.sin(f.pulse);
+    const glow=ctx.createRadialGradient(ex,ey,0,ex,ey,5*pulse);
+    glow.addColorStop(0,f.color+"bb");glow.addColorStop(1,"transparent");
+    ctx.beginPath();ctx.arc(ex,ey,5*pulse,0,Math.PI*2);ctx.fillStyle=glow;ctx.fill();
+  }
+  function drawParticle(p){
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+    if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.color+Math.floor(p.alpha*255).toString(16).padStart(2,"0");ctx.fill();
+  }
+  function drawGrid(){
+    ctx.strokeStyle="rgba(20,40,70,0.3)";ctx.lineWidth=0.5;
+    const step=60;
+    for(let x=0;x<W;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  }
+  function animate(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle="#060d1a";ctx.fillRect(0,0,W,H);
+    drawGrid();fibers.forEach(drawFiber);particles.forEach(drawParticle);
+    requestAnimationFrame(animate);
+  }
+  window.addEventListener("resize",resize);
+  resize();animate();
+})();
+</script>
+
+<!-- APP -->
+<div id="app-screen" style="display:none">
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+          <path d="M1.5 8.5C5 4.5 9.2 2.5 12 2.5s7 2 10.5 6"/>
+          <path d="M4.5 11.5C7 8.5 9.5 7 12 7s5 1.5 7.5 4.5"/>
+          <path d="M7.5 14.5C9 12.5 10.5 11.5 12 11.5s3 1 4.5 3"/>
+          <circle cx="12" cy="18.5" r="1.5" fill="#22d3ee" stroke="none"/>
+        </svg>
+      </div>
+    <div class="logo-text">Ingeniería <span>Unitel</span></div>
+  </div>
+  <div class="topbar-right">
+    <span id="role-badge" style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:rgba(59,130,246,.2);color:#93c5fd">Técnico</span>
+    <span class="badge-count" id="openBadge">0</span>
+    <button onclick="doLogout()" style="background:var(--red-bg);border:1px solid #fecaca;color:var(--red-txt);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;box-shadow:0 1px 3px rgba(220,38,38,.15)"><i class="ti ti-logout" style="font-size:14px"></i>Salir</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" id="tab-dash" onclick="goScreen('dash')"><i class="ti ti-layout-dashboard"></i>Panel</div>
+  <div class="tab" id="tab-tickets" onclick="goScreen('tickets')"><i class="ti ti-clipboard-list"></i>Tickets</div>
+  <div class="tab" id="tab-tecs" onclick="goScreen('tecs')" class="admin-only"><i class="ti ti-users"></i>Técnicos</div>
+  <div class="tab" id="tab-zonas" onclick="goScreen('zonas')"><i class="ti ti-map-pin"></i>Zonas</div>
+  <div class="tab" id="tab-inst" onclick="goScreen('inst')"><i class="ti ti-tools"></i>Instalación</div>
+  <div class="tab" id="tab-super" onclick="goScreen('super')" style="display:none"><i class="ti ti-chart-bar"></i>Super</div>
+  <div class="tab" id="tab-pagos" onclick="goScreen('pagos')" style="display:none"><i class="ti ti-cash"></i>Pagos</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen active" id="screen-dash">
+  <div class="dash-header">Resumen del día</div>
+
+  <!-- STATUS PILLS -->
+  <div class="status-row">
+    <div class="status-pill-card" style="border-top:3px solid #f59e0b">
+      <i class="ti ti-ticket" style="font-size:20px;color:#f59e0b;opacity:.8"></i>
+      <div class="spill-num" style="color:#f59e0b;font-size:28px" id="sn-nuevo">0</div>
+      <div class="spill-lbl">Nuevos</div>
+    </div>
+    <div class="status-pill-card" style="border-top:3px solid #3b82f6">
+      <i class="ti ti-user-check" style="font-size:20px;color:#3b82f6;opacity:.8"></i>
+      <div class="spill-num" style="color:#3b82f6;font-size:28px" id="sn-asignado">0</div>
+      <div class="spill-lbl">Asignados</div>
+    </div>
+    <div class="status-pill-card" style="border-top:3px solid #a855f7">
+      <i class="ti ti-loader" style="font-size:20px;color:#a855f7;opacity:.8"></i>
+      <div class="spill-num" style="color:#a855f7;font-size:28px" id="sn-proceso">0</div>
+      <div class="spill-lbl">En proceso</div>
+    </div>
+    <div class="status-pill-card" style="border-top:3px solid #22c55e">
+      <i class="ti ti-circle-check" style="font-size:20px;color:#22c55e;opacity:.8"></i>
+      <div class="spill-num" style="color:#22c55e;font-size:28px" id="sn-cerrado">0</div>
+      <div class="spill-lbl">Cerrados</div>
+    </div>
+  </div>
+
+  <!-- GAUGES -->
+  <div class="gauges-row">
+    <div class="gauge-card">
+      <div class="gauge-ring">
+        <svg viewBox="0 0 90 90"><circle class="track" cx="45" cy="45" r="36"/><circle class="fill" id="g-pendientes" cx="45" cy="45" r="36" stroke="var(--orange)" stroke-dasharray="0 226"/></svg>
+        <div class="gauge-center">
+          <div class="gauge-num" style="color:var(--orange)" id="g-pend-num">0</div>
+        </div>
+      </div>
+      <div class="gauge-label">Instalaciones</div>
+      <div class="gauge-sub">Registradas</div>
+    </div>
+    <div class="gauge-card">
+      <div class="gauge-ring">
+        <svg viewBox="0 0 90 90"><circle class="track" cx="45" cy="45" r="36"/><circle class="fill" id="g-resueltos" cx="45" cy="45" r="36" stroke="var(--green)" stroke-dasharray="0 226"/></svg>
+        <div class="gauge-center">
+          <div class="gauge-num" style="color:var(--green)" id="g-res-num">0</div>
+        </div>
+      </div>
+      <div class="gauge-label">Resueltos</div>
+      <div class="gauge-sub">Cerrados</div>
+    </div>
+    <div class="gauge-card">
+      <div class="gauge-ring">
+        <svg viewBox="0 0 90 90"><circle class="track" cx="45" cy="45" r="36"/><circle class="fill" id="g-tecnicos" cx="45" cy="45" r="36" stroke="var(--cyan)" stroke-dasharray="0 226"/></svg>
+        <div class="gauge-center">
+          <div class="gauge-num" style="color:var(--cyan)" id="g-tec-num">0</div>
+        </div>
+      </div>
+      <div class="gauge-label">Técnicos</div>
+      <div class="gauge-sub">Registrados</div>
+    </div>
+    <div class="gauge-card">
+      <div class="gauge-ring">
+        <svg viewBox="0 0 90 90"><circle class="track" cx="45" cy="45" r="36"/><circle class="fill" id="g-urgentes" cx="45" cy="45" r="36" stroke="var(--red)" stroke-dasharray="0 226"/></svg>
+        <div class="gauge-center">
+          <div class="gauge-num" style="color:var(--red)" id="g-urg-num">0</div>
+        </div>
+      </div>
+      <div class="gauge-label">Urgentes</div>
+      <div class="gauge-sub">Prioridad alta</div>
+    </div>
+  </div>
+
+  <!-- BAR CHART FALLAS -->
+  <div class="chart-card" id="chart-fallas-dash">
+    <div class="chart-title">Fallas más frecuentes</div>
+    <div id="bars-fallas"><div style="font-size:13px;color:var(--text3);text-align:center;padding:12px">Sin datos aún</div></div>
+  </div>
+
+  <!-- TICKETS URGENTES -->
+  <div class="sec-title">Tickets urgentes / nuevos <span class="sec-count" id="sc-dash">0</span></div>
+  <div id="dash-list"><div class="loading"><i class="ti ti-loader"></i>Cargando...</div></div>
+  <!-- Recuperar equipos - solo superadmin -->
+  <div id="dash-recuperar-section" style="display:none">
+    <div class="sec-title">Equipos para recuperar <span class="sec-count" id="sc-recuperar-dash">0</span></div>
+    <div id="dash-recuperar"></div>
+  </div>
+</div>
+
+<!-- TICKETS -->
+<div class="screen" id="screen-tickets">
+  <div class="search-wrap"><div class="search-box"><i class="ti ti-search"></i><input type="search" placeholder="Buscar cliente, zona, falla…" oninput="renderAll()" id="sInput"></div></div>
+  <div class="chips">
+    <button class="chip active" onclick="setF('todos',this)">Todos</button>
+    <button class="chip" onclick="setF('nuevo',this)">Nuevo</button>
+    <button class="chip" onclick="setF('asignado',this)">Asignado</button>
+    <button class="chip" onclick="setF('proceso',this)">En proceso</button>
+    <button class="chip" onclick="setF('cerrado',this)">Cerrados</button>
+  </div>
+  <div id="tlist"><div class="loading"><i class="ti ti-loader"></i>Cargando...</div></div>
+</div>
+
+<!-- TECNICOS -->
+<div class="screen" id="screen-tecs">
+  <div style="padding:14px 12px 6px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:12px;font-weight:700;color:var(--text3)">EQUIPO DE CAMPO</span>
+    <button class="btn btn-blue btn-sm" id="btn-agregar-tec" onclick="openAddTec()">+ Agregar</button>
+  </div>
+  <div id="tec-list"><div class="loading"><i class="ti ti-loader"></i>Cargando...</div></div>
+</div>
+
+<!-- ZONAS -->
+<div class="screen" id="screen-zonas">
+  <div class="sec-title" style="padding-top:14px">Tickets por zona <span class="sec-count" id="sc-zonas">0</span></div>
+  <div id="zonas-list"></div>
+  <div class="sec-title">Fallas más frecuentes</div>
+  <div id="fallas-list"></div>
+</div>
+
+<!-- SUPER ADMIN -->
+<div class="screen" id="screen-super">
+  <div style="padding:14px 12px 6px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:12px;font-weight:700;color:var(--text3)">RESUMEN EJECUTIVO</span>
+    <button class="btn btn-blue btn-sm" onclick="generarCorte()"><i class="ti ti-file-invoice" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Corte del mes</button>
+  </div>
+
+  <!-- KPIs -->
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 12px 12px" id="super-kpis"></div>
+
+  <!-- Ingresos vs Egresos -->
+  <div style="background:var(--surface);margin:0 12px 12px;border:1px solid var(--border);border-radius:var(--r);padding:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Balance del mes</div>
+    <div id="super-balance"></div>
+  </div>
+
+  <!-- Ingresos por zona -->
+  <div style="background:var(--surface);margin:0 12px 12px;border:1px solid var(--border);border-radius:var(--r);padding:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Ingresos por zona este mes</div>
+    <div id="super-zonas"></div>
+  </div>
+
+  <!-- Egresos -->
+  <div class="sec-title">Egresos del mes <span class="sec-count" id="sc-egresos">$0</span></div>
+  <div style="padding:0 12px 8px;display:flex;justify-content:flex-end">
+    <button class="btn btn-blue btn-sm" onclick="openNewEgreso()">+ Egreso</button>
+  </div>
+  <div id="egresos-list"></div>
+
+  <!-- Equipos suspendidos -->
+  <div class="sec-title" style="margin-top:8px">Equipos para recuperar <span class="sec-count" id="sc-recuperar">0</span></div>
+  <div id="recuperar-list"></div>
+</div>
+
+<!-- PAGOS -->
+<div class="screen" id="screen-pagos">
+  <div style="padding:12px 12px 6px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:12px;font-weight:700;color:var(--text3)">CONTROL DE PAGOS</span>
+    <button class="btn btn-blue btn-sm" onclick="openNewPago()">+ Cliente</button>
+  </div>
+
+  <!-- Resumen mensual -->
+  <div style="background:var(--surface);margin:0 12px 10px;border:1px solid var(--border);border-radius:var(--r);padding:14px">
+    <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Total ingreso por mes</div>
+    <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px" id="pagos-resumen"></div>
+  </div>
+
+  <!-- Vista: Zonas o Lista -->
+  <div style="display:flex;gap:8px;padding:0 12px 10px;align-items:center">
+    <button class="chip active" id="btn-view-zonas" onclick="setPagosView('zonas',this)"><i class="ti ti-map-pin" style="font-size:13px;vertical-align:-2px;margin-right:3px"></i>Por zona</button>
+    <button class="chip" id="btn-view-lista" onclick="setPagosView('lista',this)"><i class="ti ti-list" style="font-size:13px;vertical-align:-2px;margin-right:3px"></i>Lista completa</button>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button class="chip" id="fp-todos" onclick="setFP('todos',this)" style="font-size:11px;padding:4px 10px">Todos</button>
+      <button class="chip" id="fp-pagado" onclick="setFP('pagado',this)" style="font-size:11px;padding:4px 10px">Pagados</button>
+      <button class="chip" id="fp-pendiente" onclick="setFP('pendiente',this)" style="font-size:11px;padding:4px 10px">Pendientes</button>
+      <button class="chip" id="fp-vencido" onclick="setFP('vencido',this)" style="font-size:11px;padding:4px 10px">Vencidos</button>
+    </div>
+  </div>
+
+  <!-- Buscador -->
+  <div style="padding:0 12px 10px">
+    <div style="display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:0 14px">
+      <i class="ti ti-search" style="color:var(--text3);font-size:16px"></i>
+      <input id="pagos-search" type="text" placeholder="Buscar cliente por nombre o teléfono..." 
+        style="border:none;background:transparent;color:var(--text);font-size:15px;padding:10px 0;outline:none;width:100%"
+        oninput="buscarPago(this.value)">
+      <button onclick="document.getElementById('pagos-search').value='';buscarPago('')" 
+        style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:4px">×</button>
+    </div>
+  </div>
+
+  <div id="pagos-list"><div class="loading"><i class="ti ti-loader"></i>Cargando...</div></div>
+</div>
+
+<!-- INSTALACIONES -->
+<div class="screen" id="screen-inst">
+  <div style="padding:14px 12px 6px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:12px;font-weight:700;color:var(--text3)">INSTALACIONES NUEVAS</span>
+    <button class="btn btn-blue btn-sm" id="btn-nueva-inst" onclick="openNewInst()">+ Nueva</button>
+  </div>
+  <div class="chips">
+    <button class="chip active" onclick="setFI('todos',this)">Todas</button>
+    <button class="chip" onclick="setFI('pendiente',this)">Pendiente</button>
+    <button class="chip" onclick="setFI('proceso',this)">En proceso</button>
+    <button class="chip" onclick="setFI('completada',this)">Completadas</button>
+  </div>
+  <div id="inst-list"><div class="loading"><i class="ti ti-loader"></i>Cargando...</div></div>
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="fabAction()" aria-label="Nuevo">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</button>
+
+<!-- DETAIL -->
+<div class="overlay" id="detailOv">
+  <div class="sheet" style="padding:0;border-radius:24px 24px 0 0">
+    <div class="detail-top">
+      <button class="back-btn" onclick="closeDetail()"><i class="ti ti-chevron-left"></i>Volver</button>
+      <span id="did" style="font-size:11px;font-family:monospace;font-weight:700;color:var(--text3)"></span>
+    </div>
+    <div id="dbody" style="padding-bottom:28px"></div>
+  </div>
+</div>
+
+<!-- NUEVO TICKET -->
+<div class="overlay" id="newOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title">Nuevo ticket</div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Nombre del cliente</label><input class="finput" id="fn" type="text" placeholder="Juan García"></div>
+      <div class="fg"><label class="flabel">Teléfono</label><input class="finput" id="ft" type="tel" placeholder="999-000-0000"></div>
+    </div>
+    <div class="fg"><label class="flabel">Dirección</label><input class="finput" id="fd" placeholder="Calle, número, colonia"></div>
+    <div class="fg"><label class="flabel">Ubicación en Google Maps</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="finput" id="fmaps" type="url" placeholder="https://maps.google.com/..." style="flex:1">
+        <button type="button" onclick="document.getElementById('fmaps').value=''" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;border-radius:var(--r-sm);padding:10px 12px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap">Limpiar</button>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:5px">Abre Google Maps, busca la dirección, toca Compartir y pega el link aquí</div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Población / Zona</label>
+        <select class="fselect" id="fz">
+          <option value="">Seleccionar</option>
+          <option>San Marcos</option><option>Xcuyun</option><option>Chichi Suárez</option>
+          <option>Sitpach</option><option>Conkal</option><option>Yaxché</option>
+          <option>San Rafael</option><option>Chunchumil</option><option>Mococha</option>
+          <option>Baca</option><option>Cacalchén</option><option>Bokobá</option>
+          <option>Sudzal</option><option>Seyé</option><option>Paraíso</option>
+          <option>Chinkindzonot</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flabel">Tipo de falla</label>
+        <select class="fselect" id="ff">
+          <option value="">Seleccionar</option>
+          <option>Sin señal</option><option>Internet lento</option>
+          <option>Corte intermitente</option><option>Sin servicio</option>
+          <option>Cable dañado</option><option>Equipo defectuoso</option>
+          <option>Configuración</option><option>Otro</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label class="flabel">Descripción</label><textarea class="ftextarea" id="fdes" placeholder="Describe el problema…"></textarea></div>
+    <div class="fg"><label class="flabel">Número de serie <span style="color:var(--text3);font-weight:400">(opcional)</span></label><input class="finput" id="f-serie" type="text" placeholder="Ej. RTX-2024-XXXXXX" style="font-family:monospace"></div>
+    <div class="fg"><label class="flabel">Asignar técnico</label><select class="fselect" id="ftec"><option value="">Sin asignar</option></select></div>
+    <div class="fg"><label class="flabel">Prioridad</label>
+      <div class="pri-chips">
+        <div class="pri-chip active" onclick="setPri('normal',this)">Normal</div>
+        <div class="pri-chip" onclick="setPri('alta',this)">Alta</div>
+        <div class="pri-chip" onclick="setPri('urgente',this)">Urgente</div>
+      </div>
+    </div>
+    <button class="btn btn-blue" onclick="createTicket()">Crear ticket</button>
+    <button class="btn btn-outline" onclick="document.getElementById('newOv').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<!-- ACTUALIZAR -->
+<div class="overlay" id="updOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title">Actualizar ticket</div>
+    <input type="hidden" id="uid">
+    <div class="frow">
+      <div class="fg"><label class="flabel">Estado</label>
+        <select class="fselect" id="ustat">
+          <option value="nuevo">Nuevo</option><option value="asignado">Asignado</option>
+          <option value="proceso">En proceso</option><option value="cerrado">Cerrado</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flabel">Técnico</label><select class="fselect" id="utec"></select></div>
+    </div>
+    <div class="fg"><label class="flabel">Nota de visita</label><textarea class="ftextarea" id="unota" placeholder="¿Qué se encontró y qué se hizo?"></textarea></div>
+    <div class="fg">
+      <label class="flabel">Fotografías de evidencia</label>
+      <div class="foto-zone" onclick="document.getElementById('fotoIn').click()">
+        <i class="ti ti-camera"></i><p>Toca para subir fotos</p><small>Cámara o galería</small>
+      </div>
+      <input type="file" id="fotoIn" accept="image/*" multiple capture="environment" onchange="addFotos(this)">
+      <div class="foto-grid" id="fpreview"></div>
+    </div>
+    <button class="btn btn-blue" onclick="saveUpd()">Guardar actualización</button>
+    <button class="btn btn-outline" onclick="document.getElementById('updOv').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<!-- ADD TECNICO -->
+<div class="overlay" id="addTecOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title">Registrar técnico</div>
+    <div class="fg"><label class="flabel">Nombre completo</label><input class="finput" id="atn" placeholder="Nombre del técnico"></div>
+    <div class="fg"><label class="flabel">Teléfono</label><input class="finput" id="att" type="tel" placeholder="999-000-0000"></div>
+    <div class="fg"><label class="flabel">Correo</label><input class="finput" id="ate" type="email" placeholder="tecnico@gmail.com"></div>
+    <div class="fg"><label class="flabel">Zona asignada</label>
+      <select class="fselect" id="atz">
+        <option>San Marcos</option><option>Xcuyun</option><option>Chichi Suárez</option>
+        <option>Sitpach</option><option>Conkal</option><option>Yaxché</option>
+        <option>San Rafael</option><option>Chunchumil</option><option>Mococha</option>
+        <option>Baca</option><option>Cacalchén</option><option>Bokobá</option>
+        <option>Sudzal</option><option>Seyé</option><option>Paraíso</option>
+        <option>Chinkindzonot</option><option>Múltiples zonas</option>
+      </select>
+    </div>
+    <button class="btn btn-blue" onclick="addTec()">Registrar</button>
+    <button class="btn btn-outline" onclick="document.getElementById('addTecOv').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<!-- NUEVO PAGO -->
+<div class="overlay" id="newPagoOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title">Nuevo cliente / pago</div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Nombre del cliente</label><input class="finput" id="pn" type="text" placeholder="Juan García"></div>
+      <div class="fg"><label class="flabel"># Cliente</label><input class="finput" id="pnum" type="number" placeholder="1"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Paquete</label>
+        <select class="fselect" id="ppaq">
+          <option>30 MEGAS</option><option>50 MEGAS</option><option>100 MEGAS</option>
+          <option>Paquete Básico — 5 Mbps</option><option>Paquete Hogar — 10 Mbps</option>
+          <option>Paquete Plus — 20 Mbps</option><option>Paquete Avanzado — 30 Mbps</option>
+          <option>Paquete Premium — 50 Mbps</option><option>Paquete Empresarial — 100 Mbps</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flabel">Precio mensual</label><input class="finput" id="pprecio" type="number" placeholder="300"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Fecha de pago</label>
+        <select class="fselect" id="pfdpago">
+          <option>01 DE CADA MES</option><option>02 DE CADA MES</option><option>03 DE CADA MES</option>
+          <option>04 DE CADA MES</option><option>05 DE CADA MES</option><option>10 DE CADA MES</option>
+          <option>15 DE CADA MES</option><option>20 DE CADA MES</option><option>25 DE CADA MES</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flabel">Fecha de corte</label>
+        <select class="fselect" id="pfdcorte">
+          <option>04 DE CADA MES</option><option>05 DE CADA MES</option><option>06 DE CADA MES</option>
+          <option>07 DE CADA MES</option><option>08 DE CADA MES</option><option>15 DE CADA MES</option>
+          <option>20 DE CADA MES</option><option>25 DE CADA MES</option><option>30 DE CADA MES</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label class="flabel">Zona</label>
+      <select class="fselect" id="pzona">
+        <option value="">Seleccionar</option>
+        <option>San Marcos</option><option>Xcuyun</option><option>Chichi Suárez</option>
+        <option>Sitpach</option><option>Conkal</option><option>Yaxché</option>
+        <option>San Rafael</option><option>Chunchumil</option><option>Mococha</option>
+        <option>Baca</option><option>Cacalchén</option><option>Bokobá</option>
+        <option>Sudzal</option><option>Seyé</option><option>Paraíso</option>
+        <option>Chinkindzonot</option>
+      </select>
+    </div>
+    <button class="btn btn-blue" onclick="createPago()">Registrar cliente</button>
+    <button class="btn btn-outline" onclick="document.getElementById('newPagoOv').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<!-- REGISTRAR PAGO MENSUAL -->
+<div class="overlay" id="regPagoOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title" id="regPago-title">Registrar pago</div>
+    <input type="hidden" id="rp-id">
+    <div class="frow">
+      <div class="fg"><label class="flabel">Monto pagado</label><input class="finput" id="rp-monto" type="number" placeholder="300"></div>
+      <div class="fg"><label class="flabel">Fecha de pago</label><input class="finput" id="rp-fecha" type="date"></div>
+    </div>
+    <div class="fg"><label class="flabel">Mes que cubre</label>
+      <select class="fselect" id="rp-mes">
+        <option value="enero">Enero</option><option value="febrero">Febrero</option>
+        <option value="marzo">Marzo</option><option value="abril">Abril</option>
+        <option value="mayo">Mayo</option><option value="junio">Junio</option>
+        <option value="julio">Julio</option><option value="agosto">Agosto</option>
+        <option value="septiembre">Septiembre</option><option value="octubre">Octubre</option>
+        <option value="noviembre">Noviembre</option><option value="diciembre">Diciembre</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label class="flabel">Método de pago</label>
+      <div style="display:flex;gap:8px">
+        <div id="mp-efectivo" onclick="selectMetodo('Efectivo',this)" style="flex:1;text-align:center;padding:12px;border-radius:var(--r-sm);border:1.5px solid var(--border);cursor:pointer;background:var(--surface2);color:var(--text2);font-weight:600;font-size:14px;transition:all .15s">
+          💵 Efectivo
+        </div>
+        <div id="mp-transferencia" onclick="selectMetodo('Transferencia',this)" style="flex:1;text-align:center;padding:12px;border-radius:var(--r-sm);border:1.5px solid var(--border);cursor:pointer;background:var(--surface2);color:var(--text2);font-weight:600;font-size:14px;transition:all .15s">
+          🏦 Transferencia
+        </div>
+      </div>
+      <input type="hidden" id="rp-metodo" value="Efectivo">
+    </div>
+    <div class="fg" id="comprobante-section" style="display:none">
+      <label class="flabel">Comprobante de transferencia</label>
+      <div class="foto-zone" onclick="document.getElementById('comprobanteIn').click()">
+        <i class="ti ti-file-invoice"></i>
+        <p>Subir comprobante</p>
+        <small>Foto o captura de pantalla</small>
+      </div>
+      <input type="file" id="comprobanteIn" accept="image/*" capture="environment" onchange="previewComprobante(this)">
+      <div id="comprobante-preview" style="margin-top:8px"></div>
+    </div>
+    <div class="fg"><label class="flabel">Notas</label><input class="finput" id="rp-nota" placeholder="Observaciones..."></div>
+    <button class="btn btn-blue" onclick="savePagoMensual()">Guardar pago</button>
+    <button class="btn btn-outline" onclick="document.getElementById('regPagoOv').classList.remove('open')">Cancelar</button>
+    <div id="regPago-historial" style="margin-top:14px"></div>
+  </div>
+</div>
+
+<!-- NUEVO EGRESO -->
+<div class="overlay" id="newEgresoOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title">Registrar egreso</div>
+    <div class="fg"><label class="flabel">Concepto</label>
+      <select class="fselect" id="eg-concepto">
+        <option value="">Seleccionar</option>
+        <option>Nómina / Sueldos</option>
+        <option>Materiales y equipo</option>
+        <option>Combustible</option>
+        <option>Renta</option>
+        <option>Servicios (luz, agua, internet)</option>
+        <option>Herramientas</option>
+        <option>Mantenimiento</option>
+        <option>Gastos administrativos</option>
+        <option>Otro</option>
+      </select>
+    </div>
+    <div class="fg"><label class="flabel">Descripción</label><input class="finput" id="eg-desc" placeholder="Detalle del gasto..."></div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Monto</label><input class="finput" id="eg-monto" type="number" placeholder="0.00"></div>
+      <div class="fg"><label class="flabel">Fecha</label><input class="finput" id="eg-fecha" type="date"></div>
+    </div>
+    <div class="fg"><label class="flabel">Método de pago</label>
+      <select class="fselect" id="eg-metodo">
+        <option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option>
+      </select>
+    </div>
+    <button class="btn btn-blue" onclick="saveEgreso()">Registrar egreso</button>
+    <button class="btn btn-outline" onclick="document.getElementById('newEgresoOv').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<!-- NUEVA INSTALACION -->
+<div class="overlay" id="newInstOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title">Nueva instalación</div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Nombre del cliente</label><input class="finput" id="in-nombre" type="text" placeholder="Juan García"></div>
+      <div class="fg"><label class="flabel">Teléfono</label><input class="finput" id="in-tel" type="tel" placeholder="999-000-0000"></div>
+    </div>
+    <div class="fg"><label class="flabel">Dirección</label><input class="finput" id="in-dir" placeholder="Calle, número, colonia"></div>
+    <div class="fg"><label class="flabel">Ubicación Google Maps</label>
+      <input class="finput" id="in-maps" type="url" placeholder="https://maps.google.com/...">
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">Pega el link de Google Maps</div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Población / Zona</label>
+        <select class="fselect" id="in-zona">
+          <option value="">Seleccionar</option>
+          <option>San Marcos</option><option>Xcuyun</option><option>Chichi Suárez</option>
+          <option>Sitpach</option><option>Conkal</option><option>Yaxché</option>
+          <option>San Rafael</option><option>Chunchumil</option><option>Mococha</option>
+          <option>Baca</option><option>Cacalchén</option><option>Bokobá</option>
+          <option>Sudzal</option><option>Seyé</option><option>Paraíso</option>
+          <option>Chinkindzonot</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flabel">Plan contratado</label>
+        <select class="fselect" id="in-plan">
+          <option value="">Seleccionar</option>
+          <option>Paquete Básico — 5 Mbps</option>
+          <option>Paquete Hogar — 10 Mbps</option>
+          <option>Paquete Plus — 20 Mbps</option>
+          <option>Paquete Avanzado — 30 Mbps</option>
+          <option>Paquete Premium — 50 Mbps</option>
+          <option>Paquete Empresarial — 100 Mbps</option>
+          <option>Paquete Ultra — 200 Mbps</option>
+          <option>Paquete Fibra — 300 Mbps</option>
+          <option>Paquete Fibra Plus — 500 Mbps</option>
+          <option>Paquete Gigabit — 1 Gbps</option>
+          <option>Otro</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Equipo instalado</label>
+        <select class="fselect" id="in-equipo">
+          <option value="">Seleccionar</option>
+          <option>Router básico</option><option>Router dual band</option>
+          <option>ONU GPON</option><option>Radio antena</option>
+          <option>Switch + Router</option><option>Otro</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flabel">Técnico asignado</label>
+        <select class="fselect" id="in-tec"><option value="">Sin asignar</option></select>
+      </div>
+    </div>
+    <div class="fg"><label class="flabel">Número de serie del equipo</label>
+      <input class="finput" id="in-serie" type="text" placeholder="Ej. RTX-2024-XXXXXX" style="font-family:monospace;letter-spacing:.5px">
+    </div>
+    <div class="fg"><label class="flabel">Notas adicionales</label>
+      <textarea class="ftextarea" id="in-notas" placeholder="Observaciones, accesorios adicionales, etc."></textarea>
+    </div>
+    <div class="fg">
+      <label class="flabel">Fotografías de la instalación</label>
+      <div class="foto-zone" onclick="document.getElementById('fotoInstIn').click()">
+        <i class="ti ti-camera"></i><p>Subir fotos de la instalación</p><small>Cámara o galería</small>
+      </div>
+      <input type="file" id="fotoInstIn" accept="image/*" multiple capture="environment" onchange="addFotosInst(this)">
+      <div class="foto-grid" id="fpreview-inst"></div>
+    </div>
+    <button class="btn btn-blue" onclick="createInst()">Registrar instalación</button>
+    <button class="btn btn-outline" onclick="document.getElementById('newInstOv').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<!-- DETALLE INSTALACION -->
+<div class="overlay" id="detailInstOv">
+  <div class="sheet" style="padding:0;border-radius:24px 24px 0 0">
+    <div class="detail-top">
+      <button class="back-btn" onclick="document.getElementById('detailInstOv').classList.remove('open')"><i class="ti ti-chevron-left"></i>Volver</button>
+      <span id="inst-did" style="font-size:11px;font-family:monospace;font-weight:700;color:var(--text3)"></span>
+    </div>
+    <div id="inst-dbody" style="padding-bottom:28px"></div>
+  </div>
+</div>
+
+<div id="contact-footer" style="display:none;text-align:center;padding:18px 16px 28px;border-top:1px solid rgba(255,255,255,.06);margin-top:8px">
+  <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Contacto directo ejecutivos</div>
+  <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap">
+    <a href="tel:9992497062" style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 14px;text-decoration:none">
+      <svg width="16" height="16" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.53a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span style="font-size:13px;font-weight:700;color:var(--cyan)">999 249 7062</span>
+    </a>
+    <a href="tel:9991582759" style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 14px;text-decoration:none">
+      <svg width="16" height="16" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.53a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span style="font-size:13px;font-weight:700;color:var(--cyan)">999 158 2759</span>
+    </a>
+  </div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBTP289NlS8l-eECBm_1WVPfD-fzkRNMFk",
+  authDomain: "unitel-soporte.firebaseapp.com",
+  projectId: "unitel-soporte",
+  storageBucket: "unitel-soporte.firebasestorage.app",
+  messagingSenderId: "486235388834",
+  appId: "1:486235388834:web:78d96b78013ecec03950fb"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const COLORS=['#3b82f6','#a855f7','#22c55e','#f59e0b','#ef4444','#22d3ee','#f97316','#06b6d4','#84cc16','#ec4899'];
+let curFilter='todos', curFilterP='todos', selFotos=[], selPri='normal';
+let tickets=[], tecs=[], instalaciones=[];
+let currentUser=null, currentRole='tecnico', currentTecId=null;
+
+function ini(n){return n.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase()}
+function col(id){const i=tecs.findIndex(x=>x.id===id);return COLORS[Math.max(0,i)%COLORS.length]}
+function slbl(s){return{nuevo:'Nuevo',asignado:'Asignado',proceso:'En proceso',cerrado:'Cerrado'}[s]||s}
+function scls(s){return{nuevo:'p-nuevo',asignado:'p-asignado',proceso:'p-proceso',cerrado:'p-cerrado'}[s]||'p-nuevo'}
+function priColor(p){return{normal:'var(--text3)',alta:'var(--amber)',urgente:'var(--red)'}[p]}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function ts(){return new Date().toLocaleString('es-MX',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}
+
+const CIRC=2*Math.PI*36;
+function setGauge(id,val,max){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const pct=max>0?Math.min(val/max,1):0;
+  el.style.strokeDasharray=`${pct*CIRC} ${CIRC}`;
+}
+
+window.doLogin=async function(){
+  const btn=document.getElementById('loginBtn');
+  const e=document.getElementById('lemail').value.trim();
+  const p=document.getElementById('lpass').value;
+  const err=document.getElementById('login-error');
+  err.style.display='none';btn.textContent='Entrando...';btn.disabled=true;
+  try{await signInWithEmailAndPassword(auth,e,p);}
+  catch(ex){err.style.display='block';btn.textContent='Iniciar sesión';btn.disabled=false;}
+};
+window.doLogout=async function(){await signOut(auth)};
+
+// Show right panel if wide enough
+if(window.innerWidth > 700){
+  const rp=document.getElementById('login-right-panel');
+  if(rp) rp.style.display='block';
+}
+
+onAuthStateChanged(auth, async user=>{
+  if(user){
+    currentUser=user;
+    // Check role in 'usuarios' collection
+    try{
+      const snap=await getDoc(doc(db,'usuarios',user.uid));
+      if(snap.exists()){
+        currentRole=snap.data().rol||'tecnico';
+        currentTecId=snap.data().tecId||null;
+      } else {
+        currentRole='tecnico';
+      }
+    }catch(e){ currentRole='tecnico'; }
+    // Super admin override
+    if(user.email==='alejandro.martin3767@gmail.com') currentRole='superadmin';
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-screen').style.display='block';
+    applyRoleUI();
+    loadData();
+  }else{
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('app-screen').style.display='none';
+    const btn=document.getElementById('loginBtn');
+    btn.textContent='Iniciar sesión';btn.disabled=false;
+  }
+});
+
+function applyRoleUI(){
+  const isSuperAdmin=currentRole==='superadmin';
+  const isAdmin=currentRole==='admin';
+  // Quitar activo de todas las pestañas y pantallas
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  if(isSuperAdmin){
+    // Superadmin ve dashboard ejecutivo primero
+    document.getElementById('tab-super').classList.add('active');
+    document.getElementById('screen-super').classList.add('active');
+    renderSuper();
+  } else if(isAdmin){
+    // Admin ve Pagos primero
+    document.getElementById('tab-pagos').classList.add('active');
+    document.getElementById('screen-pagos').classList.add('active');
+    renderPagos();
+  } else {
+    // Técnico ve Tickets primero
+    document.getElementById('tab-tickets').classList.add('active');
+    document.getElementById('screen-tickets').classList.add('active');
+    renderAll();
+  }
+  // FAB solo para admins y superadmin
+  document.querySelector('.fab').style.display=(isAdmin||isSuperAdmin)?'flex':'none';
+  // Boton nueva instalacion solo para admins y superadmin
+  const btnInst=document.getElementById('btn-nueva-inst');
+  if(btnInst) btnInst.style.display=(isAdmin||isSuperAdmin)?'block':'none';
+  // Boton agregar tecnico solo para admins y superadmin
+  const btnTec=document.getElementById('btn-agregar-tec');
+  if(btnTec) btnTec.style.display=(isAdmin||isSuperAdmin)?'block':'none';
+  // Mostrar pestaña pagos solo para admins y superadmin
+  const tabPagos=document.getElementById('tab-pagos');
+  if(tabPagos) tabPagos.style.display=(isAdmin||isSuperAdmin)?'flex':'none';
+  // Mostrar pestaña super solo para superadmin
+  const tabSuper=document.getElementById('tab-super');
+  if(tabSuper) tabSuper.style.display=isSuperAdmin?'flex':'none';
+  // Mostrar seccion recuperar en dashboard para superadmin
+  const recSection=document.getElementById('dash-recuperar-section');
+  if(recSection) recSection.style.display=isSuperAdmin?'block':'none';
+  // Mostrar footer de contacto siempre
+  const footer=document.getElementById('contact-footer');
+  if(footer) footer.style.display='block';
+  // Badge de rol en topbar
+  const badge=document.getElementById('role-badge');
+  if(badge){
+    if(isSuperAdmin){
+      badge.textContent='Superadmin';
+      badge.style.background='rgba(168,85,247,.2)';
+      badge.style.color='#d8b4fe';
+    } else if(isAdmin){
+      badge.textContent='Admin';
+      badge.style.background='rgba(34,197,94,.2)';
+      badge.style.color='#86efac';
+    } else {
+      badge.textContent='Técnico';
+      badge.style.background='rgba(59,130,246,.2)';
+      badge.style.color='#93c5fd';
+    }
+  }
+}
+
+function loadData(){
+  onSnapshot(query(collection(db,'tickets'),orderBy('fecha','desc')),snap=>{
+    tickets=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderDash();renderAll();renderZonas();
+  });
+  onSnapshot(collection(db,'tecnicos'),snap=>{
+    tecs=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderTecs();renderDash();
+  });
+  onSnapshot(query(collection(db,'instalaciones'),orderBy('fecha','desc')),snap=>{
+    instalaciones=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderInst();
+  });
+  // Check recovery tickets daily
+  setTimeout(()=>{ if(currentRole==='superadmin'||currentRole==='admin') checkRecuperaciones(); }, 3000);
+}
+
+function tCard(t){
+  const tec=tecs.find(x=>x.id===t.tec);
+  const priColors={urgente:'#ef4444',alta:'#f59e0b',normal:'transparent'};
+  const priBorder=t.pri!=='normal'?`border-left:3px solid ${priColors[t.pri]};`:'border-left:3px solid rgba(56,189,248,0.08);';
+  const priTag=t.pri==='urgente'?`<span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;background:rgba(239,68,68,0.18);color:#ef4444;border:1px solid rgba(239,68,68,0.3);letter-spacing:.5px">URGENTE</span>`:
+               t.pri==='alta'?`<span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;background:rgba(245,158,11,0.18);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);letter-spacing:.5px">ALTA</span>`:'';
+  const statusColors={nuevo:'#3b82f6',asignado:'#f59e0b',proceso:'#a855f7',cerrado:'#22c55e'};
+  const sc=statusColors[t.status]||'#64748b';
+  const tecAv=tec?`<div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:50%;background:${col(t.tec)}22;color:${col(t.tec)};font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1.5px solid ${col(t.tec)}44">${ini(tec.nombre)}</div><span style="font-size:12px;color:var(--text2);font-weight:600">${tec.nombre.split(' ')[0]}</span></div>`
+    :`<span style="font-size:11px;color:var(--text3);font-style:italic">Sin asignar</span>`;
+  const fechaStr=t.fecha?.toDate?t.fecha.toDate().toLocaleDateString('es-MX',{day:'2-digit',month:'short'}):'';
+  return `<div onclick="openDetail('${t.id}')" style="${priBorder}background:rgba(10,20,40,0.75);margin:0 12px 5px;border-radius:12px;border:1px solid rgba(56,189,248,0.1);overflow:hidden;cursor:pointer;transition:all .18s;backdrop-filter:blur(8px)"
+    onmouseenter="this.style.background='rgba(15,30,55,0.92)';this.style.borderColor='rgba(56,189,248,0.28)'"
+    onmouseleave="this.style.background='rgba(10,20,40,0.75)';this.style.borderColor='rgba(56,189,248,0.1)'">
+    <div style="padding:11px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:32px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${sc};box-shadow:0 0 7px ${sc}99;flex-shrink:0"></div>
+        <span style="font-size:9px;color:var(--text3);font-family:monospace;font-weight:700">${t.id.substring(0,6).toUpperCase()}</span>
+      </div>
+      <div style="min-width:0">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap">
+          <span style="font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.cliente}</span>
+          ${priTag}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#f59e0b;display:flex;align-items:center;gap:3px"><i class="ti ti-alert-circle" style="font-size:12px"></i>${t.falla}</span>
+          <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:3px"><i class="ti ti-map-pin" style="font-size:11px"></i>${t.zona}</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">
+        <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:${sc}1a;color:${sc};border:1px solid ${sc}44;white-space:nowrap">${slbl(t.status)}</span>
+        ${tecAv}
+        <span style="font-size:10px;color:var(--text3)">${fechaStr}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+window.renderDash=function(){
+  const c={nuevo:0,asignado:0,proceso:0,cerrado:0};
+  tickets.forEach(t=>c[t.status]=(c[t.status]||0)+1);
+  const total=tickets.length;
+  const pendientes=(c.nuevo||0)+(c.asignado||0)+(c.proceso||0);
+  const urgentes=tickets.filter(t=>t.pri==='urgente'&&t.status!=='cerrado').length;
+
+  document.getElementById('sn-nuevo').textContent=c.nuevo||0;
+  document.getElementById('sn-asignado').textContent=c.asignado||0;
+  document.getElementById('sn-proceso').textContent=c.proceso||0;
+  document.getElementById('sn-cerrado').textContent=c.cerrado||0;
+  document.getElementById('openBadge').textContent=pendientes;
+
+  const totalInst=instalaciones?instalaciones.length:0;
+  document.getElementById('g-pend-num').textContent=totalInst;
+  document.getElementById('g-res-num').textContent=c.cerrado||0;
+  document.getElementById('g-tec-num').textContent=tecs.length;
+  document.getElementById('g-urg-num').textContent=urgentes;
+
+  setGauge('g-pendientes',totalInst,Math.max(totalInst,1));
+  setGauge('g-resueltos',c.cerrado||0,Math.max(total,1));
+  setGauge('g-tecnicos',tecs.length,Math.max(tecs.length,1));
+  setGauge('g-urgentes',urgentes,Math.max(pendientes,1));
+
+  const fm={};
+  tickets.forEach(t=>{fm[t.falla]=(fm[t.falla]||0)+1});
+  const fl=Object.entries(fm).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const fmax=fl[0]?fl[0][1]:1;
+  document.getElementById('bars-fallas').innerHTML=fl.length?fl.map(([f,c],i)=>`
+    <div class="bar-row">
+      <span class="bar-label">${f}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/fmax*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+      <span class="bar-val" style="color:${COLORS[i%COLORS.length]}">${c}</span>
+    </div>`).join(''):'<div style="font-size:13px;color:var(--text3);text-align:center;padding:12px">Sin datos aún</div>';
+
+  const urg=tickets.filter(t=>t.status!=='cerrado'&&(t.pri==='urgente'||t.status==='nuevo'));
+  document.getElementById('sc-dash').textContent=urg.length;
+  document.getElementById('dash-list').innerHTML=urg.length?urg.map(tCard).join(''):'<div class="empty"><i class="ti ti-circle-check"></i><p>Todo al corriente</p></div>';
+
+  // For superadmin show recovery equipment section in dashboard
+  if(currentRole==='superadmin'){
+    const hoy=new Date();
+    const recuperar=pagos.filter(p=>{
+      if(p.status!=='suspendido'||!p.fechaSuspension) return false;
+      const dias=Math.floor((hoy-new Date(p.fechaSuspension))/(1000*60*60*24));
+      return dias>=10;
+    });
+    const recDiv=document.getElementById('dash-recuperar');
+    const recCount=document.getElementById('sc-recuperar-dash');
+    if(recDiv){
+      if(recCount) recCount.textContent=recuperar.length;
+      recDiv.innerHTML=recuperar.length?recuperar.map(p=>{
+        const dias=Math.floor((hoy-new Date(p.fechaSuspension))/(1000*60*60*24));
+        return `<div style="background:var(--surface);margin:0 12px 8px;border:1px solid rgba(239,68,68,.35);border-radius:var(--r);padding:13px 14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:15px;font-weight:700;color:var(--text)">${p.nombre}</span>
+            <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--red-bg);color:var(--red-txt)">⚠ ${dias} días</span>
+          </div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:8px">${p.zona} · ${p.paquete||'—'}</div>
+          <button onclick="crearTicketRecuperacion('${p.id}','${p.nombre}','${p.zona}')" 
+            style="background:var(--red-bg);border:1px solid rgba(239,68,68,.3);color:var(--red-txt);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;width:100%">
+            <i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Crear ticket urgente de recuperación
+          </button>
+        </div>`;
+      }).join(''):'<div class="empty" style="padding:20px"><i class="ti ti-circle-check"></i><p>Sin equipos pendientes de recuperar</p></div>';
+    }
+  }
+};
+
+window.renderAll=function(){
+  let list=[...tickets];
+  // Técnicos solo ven sus tickets asignados
+  if(currentRole!=='admin' && currentTecId){
+    list=list.filter(t=>t.tec===currentTecId);
+  }
+  if(curFilter!=='todos')list=list.filter(t=>t.status===curFilter);
+  const q=document.getElementById('sInput')?.value?.toLowerCase()||'';
+  if(q)list=list.filter(t=>[t.cliente,t.zona,t.falla].join(' ').toLowerCase().includes(q));
+  document.getElementById('tlist').innerHTML=list.length?list.map(tCard).join(''):'<div class="empty"><i class="ti ti-clipboard-list"></i><p>Sin tickets asignados</p></div>';
+};
+
+window.renderTecs=function(){
+  document.getElementById('tec-list').innerHTML=tecs.length?tecs.map((tc,idx)=>{
+    const open=tickets.filter(t=>t.tec===tc.id&&t.status!=='cerrado').length;
+    const cerrados=tickets.filter(t=>t.tec===tc.id&&t.status==='cerrado').length;
+    const c=col(tc.id);
+    return `<div style="background:rgba(10,20,40,0.78);margin:0 12px 7px;border:1px solid rgba(56,189,248,0.12);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(8px);transition:all .18s;cursor:default"
+      onmouseenter="this.style.borderColor='rgba(56,189,248,0.28)'"
+      onmouseleave="this.style.borderColor='rgba(56,189,248,0.12)'">
+      <div style="width:44px;height:44px;border-radius:50%;background:${c}22;color:${c};font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid ${c}44;flex-shrink:0">${ini(tc.nombre)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">${tc.nombre}</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:3px"><i class="ti ti-map-pin" style="font-size:11px;color:#38bdf8"></i>${tc.zona}</span>
+          ${tc.tel?`<span style="font-size:11px;color:var(--text3)">📞 ${tc.tel}</span>`:''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">
+        <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:${open>0?'rgba(59,130,246,0.18)':'rgba(255,255,255,0.05)'};color:${open>0?'#93c5fd':'var(--text3)'}">
+          ${open} abierto${open!==1?'s':''}
+        </span>
+        <span style="font-size:10px;color:var(--text3)">${cerrados} cerrado${cerrados!==1?'s':''}</span>
+      </div>
+    </div>`;
+  }).join(''):'<div class="empty"><i class="ti ti-users"></i><p>Sin técnicos registrados</p></div>';
+};
+
+window.renderZonas=function(){
+  const zm={},fm={};
+  tickets.forEach(t=>{zm[t.zona]=(zm[t.zona]||0)+1;fm[t.falla]=(fm[t.falla]||0)+1});
+  const zl=Object.entries(zm).sort((a,b)=>b[1]-a[1]);
+  const fl=Object.entries(fm).sort((a,b)=>b[1]-a[1]);
+  const zmax=zl[0]?zl[0][1]:1;
+  document.getElementById('sc-zonas').textContent=tickets.length;
+  document.getElementById('zonas-list').innerHTML=zl.length?zl.map(([z,c],i)=>`
+    <div class="zona-card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:14px;font-weight:700;color:var(--text)">${z}</span>
+        <span style="font-size:22px;font-weight:800;color:${COLORS[i%COLORS.length]}">${c}</span>
+      </div>
+      <div class="zona-bar"><div class="zona-fill" style="width:${Math.round(c/zmax*100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+    </div>`).join(''):'<div class="empty"><i class="ti ti-map-pin"></i><p>Sin datos aún</p></div>';
+  document.getElementById('fallas-list').innerHTML=fl.map(([f,c],i)=>`
+    <div style="background:rgba(10,20,40,0.75);margin:0 12px 6px;border:1px solid rgba(56,189,248,0.1);border-radius:12px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(8px)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${COLORS[i%COLORS.length]};box-shadow:0 0 5px ${COLORS[i%COLORS.length]}88;flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:600;color:var(--text)">${f}</span>
+      </div>
+      <span style="font-size:12px;font-weight:800;padding:3px 11px;border-radius:20px;background:${COLORS[i%COLORS.length]}1a;color:${COLORS[i%COLORS.length]};border:1px solid ${COLORS[i%COLORS.length]}44">${c}</span>
+    </div>`).join('');
+};
+
+window.goScreen=function(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='zonas') renderZonas();
+  if(name==='tickets') renderAll();
+  if(name==='tecs') renderTecs();
+  if(name==='pagos') renderPagos();
+  if(name==='inst') renderInst();
+  if(name==='super') renderSuper();
+};
+
+window.setF=function(f,el){curFilter=f;document.querySelectorAll('.chips .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderAll()};
+
+window.openDetail=function(id){
+  const t=tickets.find(x=>x.id===id);if(!t)return;
+  const tec=tecs.find(x=>x.id===t.tec);
+  document.getElementById('did').textContent=id.substring(0,8).toUpperCase();
+  document.getElementById('dbody').innerHTML=`
+    <div class="detail-section" style="margin-top:10px">
+      <div class="ds-title">Cliente</div>
+      <div class="ds-row"><span class="ds-key">Nombre</span><span class="ds-val">${t.cliente}</span></div>
+      <div class="ds-row"><span class="ds-key">Teléfono</span><span class="ds-val" style="color:var(--cyan)">${t.tel||'—'}</span></div>
+      <div class="ds-row"><span class="ds-key">Dirección</span><span class="ds-val">${t.dir||'—'}</span></div>
+      ${t.maps?`<div class="ds-row"><span class="ds-key">Ubicación</span><span class="ds-val"><a href="${t.maps}" target="_blank" style="color:var(--cyan);font-weight:700;display:flex;align-items:center;gap:4px;justify-content:flex-end"><i class="ti ti-map-pin" style="font-size:14px"></i>Ver en Maps</a></span></div>`:''}
+      <div class="ds-row"><span class="ds-key">Zona</span><span class="ds-val">${t.zona}</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">Ticket</div>
+      <div class="ds-row"><span class="ds-key">Estado</span><span class="ds-val"><span class="pill ${scls(t.status)}">${slbl(t.status)}</span></span></div>
+      <div class="ds-row"><span class="ds-key">Falla</span><span class="ds-val">${t.falla}</span></div>
+      <div class="ds-row"><span class="ds-key">Prioridad</span><span class="ds-val" style="color:${priColor(t.pri)};text-transform:capitalize">${t.pri}</span></div>
+      <div class="ds-row"><span class="ds-key">Técnico</span><span class="ds-val">${tec?tec.nombre:'Sin asignar'}</span></div>
+      ${t.serie?`<div class="ds-row"><span class="ds-key">No. Serie</span><span class="ds-val" style="font-family:monospace;color:var(--cyan)">${t.serie}</span></div>`:''}
+      <div class="ds-row" style="flex-direction:column;gap:5px"><span class="ds-key">Descripción</span><span style="font-size:13px;color:var(--text2);line-height:1.5">${t.desc||'—'}</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">Historial de visitas</div>
+      ${t.hist&&t.hist.length?t.hist.map(h=>`
+        <div class="hist-item">
+          <div class="hist-date">${h.fecha}</div>
+          <div class="hist-note">${h.nota}</div>
+          ${h.fotos&&h.fotos.length?`<div class="hist-photos">${h.fotos.map(f=>`<div class="hphoto"><img src="${f}"></div>`).join('')}</div>`:''}
+        </div>`).join(''):'<div style="padding:13px 14px;font-size:13px;color:var(--text3)">Sin visitas registradas.</div>'}
+    </div>
+    <div style="padding:0 12px 8px;display:flex;flex-wrap:wrap">
+      ${(currentRole==='admin'||t.tec===currentTecId)?`<button class="btn btn-blue btn-sm" onclick="openUpd('${t.id}')"><i class="ti ti-edit" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Actualizar</button>`:''}
+      ${(t.status!=='cerrado'&&(currentRole==='admin'||t.tec===currentTecId))?`<button class="btn btn-green btn-sm" onclick="cerrar('${t.id}')"><i class="ti ti-check" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Cerrar</button>`:''}
+    </div>`;
+  document.getElementById('detailOv').classList.add('open');
+};
+
+window.closeDetail=function(){document.getElementById('detailOv').classList.remove('open')};
+window.cerrar=async function(id){await updateDoc(doc(db,'tickets',id),{status:'cerrado'});toast('Ticket cerrado');closeDetail()};
+
+window.openUpd=function(id){
+  const t=tickets.find(x=>x.id===id);if(!t)return;
+  document.getElementById('uid').value=id;
+  document.getElementById('ustat').value=t.status;
+  document.getElementById('unota').value='';
+  selFotos=[];document.getElementById('fpreview').innerHTML='';
+  const sel=document.getElementById('utec');
+  sel.innerHTML='<option value="">Sin asignar</option>'+tecs.map(tc=>`<option value="${tc.id}"${tc.id===t.tec?' selected':''}>${tc.nombre} — ${tc.zona}</option>`).join('');
+  document.getElementById('updOv').classList.add('open');
+};
+
+window.saveUpd=async function(){
+  const id=document.getElementById('uid').value;
+  const status=document.getElementById('ustat').value;
+  const tec=document.getElementById('utec').value;
+  const nota=document.getElementById('unota').value.trim();
+  const t=tickets.find(x=>x.id===id);if(!t)return;
+  const hist=[...(t.hist||[])];
+  if(nota||selFotos.length) hist.push({fecha:ts(),nota:nota||'Actualización.',fotos:[...selFotos]});
+  await updateDoc(doc(db,'tickets',id),{status,tec,hist});
+  document.getElementById('updOv').classList.remove('open');
+  toast('Ticket actualizado');openDetail(id);
+};
+
+window.addFotos=function(inp){
+  Array.from(inp.files).forEach(f=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        const MAX=600;let w=img.width,h=img.height;
+        if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        const compressed=canvas.toDataURL('image/jpeg',0.6);
+        selFotos.push(compressed);
+        const prev=document.getElementById('fpreview');
+        const i=selFotos.length-1;
+        const d=document.createElement('div');d.className='fthumb';
+        d.innerHTML=`<img src="${compressed}"><button class="fdel" onclick="delFoto(${i})">×</button>`;
+        prev.appendChild(d);
+      };img.src=e.target.result;
+    };reader.readAsDataURL(f);
+  });
+};
+
+window.delFoto=function(i){
+  selFotos.splice(i,1);
+  document.getElementById('fpreview').innerHTML=selFotos.map((f,j)=>`<div class="fthumb"><img src="${f}"><button class="fdel" onclick="delFoto(${j})">×</button></div>`).join('');
+};
+
+window.fabAction=function(){
+  const activeScreen=document.querySelector('.screen.active');
+  if(activeScreen&&activeScreen.id==='screen-inst'){
+    openNewInst();
+  } else {
+    openNewTicket();
+  }
+};
+
+window.openNewTicket=function(){
+  try{
+    ['fn','ft','fd','fdes','fmaps','f-serie'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.value='';
+    });
+    const fz=document.getElementById('fz'); if(fz) fz.value='';
+    const ff=document.getElementById('ff'); if(ff) ff.value='';
+    selPri='normal';
+    document.querySelectorAll('#newOv .pri-chip').forEach(c=>c.classList.remove('active'));
+    const firstChip=document.querySelector('#newOv .pri-chip');
+    if(firstChip) firstChip.classList.add('active');
+    const sel=document.getElementById('ftec');
+    if(sel) sel.innerHTML='<option value="">Sin asignar</option>'+tecs.map(tc=>`<option value="${tc.id}">${tc.nombre} — ${tc.zona}</option>`).join('');
+    document.getElementById('newOv').classList.add('open');
+  }catch(err){ console.error('openNewTicket error:',err); }
+};
+
+window.setPri=function(p,el){selPri=p;document.querySelectorAll('#newOv .pri-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active')};
+
+window.createTicket=async function(){
+  if(currentRole!=='admin'){toast('Sin permisos para crear tickets');return}
+  const n=document.getElementById('fn').value.trim();
+  const f=document.getElementById('ff').value;
+  const z=document.getElementById('fz').value;
+  if(!n||!f||!z){toast('Completa nombre, zona y falla');return}
+  await addDoc(collection(db,'tickets'),{
+    cliente:n,tel:document.getElementById('ft').value||'—',
+    dir:document.getElementById('fd').value||'—',
+    maps:document.getElementById('fmaps').value.trim()||'',
+    zona:z,falla:f,
+    desc:document.getElementById('fdes').value||'Sin descripción.',
+    serie:document.getElementById('f-serie').value.trim()||'',
+    status:document.getElementById('ftec').value?'asignado':'nuevo',
+    tec:document.getElementById('ftec').value,
+    pri:selPri,fecha:serverTimestamp(),hist:[]
+  });
+  document.getElementById('newOv').classList.remove('open');
+  toast('Ticket creado');
+};
+
+window.openAddTec=function(){
+  ['atn','att','ate'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('addTecOv').classList.add('open');
+};
+
+window.addTec=async function(){
+  const n=document.getElementById('atn').value.trim();
+  if(!n){toast('Ingresa el nombre');return}
+  await addDoc(collection(db,'tecnicos'),{
+    nombre:n,tel:document.getElementById('att').value||'—',
+    email:document.getElementById('ate').value||'—',
+    zona:document.getElementById('atz').value
+  });
+  document.getElementById('addTecOv').classList.remove('open');
+  toast(`Técnico ${n} registrado`);
+};
+
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')});
+});
+document.getElementById('lpass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+
+// ===== PAGOS =====
+let pagos=[];
+const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MESES_CORTO=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+// Load pagos in loadData
+onSnapshot(query(collection(db,'pagos'),orderBy('num','asc')),snap=>{
+  pagos=snap.docs.map(d=>({id:d.id,...d.data()}));
+  if(document.getElementById('screen-pagos').classList.contains('active')) renderPagos();
+});
+
+function getMesActual(){return MESES[new Date().getMonth()];}
+function getPagoEstado(p){
+  const mes=getMesActual();
+  if(p.historial&&p.historial[mes]) return 'pagado';
+  const hoy=new Date();
+  const corte=parseInt((p.fdcorte||'').replace(/\D/g,''))||4;
+  if(hoy.getDate()>corte) return 'vencido';
+  return 'pendiente';
+}
+
+function pagoCard(p){
+  const estado=getPagoEstado(p);
+  const color={pagado:'var(--green)',pendiente:'var(--amber)',vencido:'var(--red)'}[estado];
+  const bgColor={pagado:'var(--green-bg)',pendiente:'var(--amber-bg)',vencido:'var(--red-bg)'}[estado];
+  const mesAct=getMesActual();
+  const pagoMes=p.historial&&p.historial[mesAct];
+  const metodoIcon=pagoMes?(pagoMes.metodo==='Transferencia'?'🏦':'💵'):'';
+  return `<div class="tcard">
+    <div class="tcard-head">
+      <div class="tcard-top">
+        <span class="tcard-id">#${p.num||'—'}</span>
+        <span onclick="event.stopPropagation();openPagoDetail('${p.id}')" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;background:${bgColor};color:${color};display:flex;align-items:center;gap:4px">
+          ${estado==='pagado'?'✓':estado==='vencido'?'⚠':'⏳'} ${estado.toUpperCase()} ${metodoIcon}
+        </span>
+      </div>
+      <div class="tcard-name" onclick="openPagoDetail('${p.id}')" style="cursor:pointer">${p.nombre}</div>
+      <div class="tcard-falla"><span class="falla-dot" style="background:var(--cyan)"></span>${p.paquete||'—'} — $${p.precio||0}/mes</div>
+    </div>
+    <div class="tcard-body" onclick="openPagoDetail('${p.id}')" style="cursor:pointer">
+      <div class="tcard-loc"><i class="ti ti-map-pin"></i>${p.zona||'—'}</div>
+      <div style="font-size:12px;color:${pagoMes?'var(--green)':'var(--text3)'}">
+        ${pagoMes?`${metodoIcon} $${pagoMes.monto} — ${pagoMes.fecha}${pagoMes.comprobante?` <span style="color:var(--cyan);font-size:11px">📎 comprobante</span>`:''}` :'Sin pago este mes'}
+      </div>
+    </div>
+  </div>`;
+}
+
+const ZONAS_LIST=['San Marcos','Xcuyun','Chichi Suárez','Sitpach','Conkal','Yaxché','San Rafael','Chunchumil','Mococha','Baca','Cacalchén','Bokobá','Sudzal','Seyé','Paraíso','Chinkindzonot'];
+let pagosView='zonas', zonaActiva=null;
+
+window.setPagosView=function(v,el){
+  pagosView=v;
+  document.getElementById('btn-view-zonas').classList.toggle('active',v==='zonas');
+  document.getElementById('btn-view-lista').classList.toggle('active',v==='lista');
+  zonaActiva=null;
+  renderPagos();
+};
+
+window.setFP=function(f,el){
+  curFilterP=f;
+  ['fp-todos','fp-pagado','fp-pendiente','fp-vencido'].forEach(id=>{
+    const el2=document.getElementById(id);
+    if(el2) el2.classList.remove('active');
+  });
+  el.classList.add('active');
+  renderPagos();
+};
+
+window.renderPagos=function(){
+  // Resumen mensual
+  const resumen=document.getElementById('pagos-resumen');
+  if(resumen){
+    const mesActIdx=new Date().getMonth();
+    resumen.innerHTML=MESES.slice(0,mesActIdx+1).map((m,i)=>{
+      const total=pagos.reduce((sum,p)=>sum+(p.historial&&p.historial[m]?Number(p.historial[m].monto||0):0),0);
+      return `<div style="flex-shrink:0;background:${total>0?'rgba(34,197,94,.15)':'var(--surface2)'};border:1px solid ${total>0?'rgba(34,197,94,.3)':'var(--border)'};border-radius:12px;padding:10px 14px;text-align:center;min-width:80px">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;margin-bottom:4px">${MESES_CORTO[i]}</div>
+        <div style="font-size:16px;font-weight:800;color:${total>0?'var(--green)':'var(--text3)'}">$${total.toLocaleString()}</div>
+      </div>`;
+    }).join('');
+  }
+
+  const container=document.getElementById('pagos-list');
+
+  if(pagosView==='zonas' && !zonaActiva){
+    // Mostrar lista de zonas con conteo y total
+    const zonasConPagos=ZONAS_LIST.filter(z=>pagos.some(p=>p.zona===z));
+    const todasZonas=[...zonasConPagos];
+    // También incluir zonas con pagos aunque no estén en la lista
+    pagos.forEach(p=>{if(p.zona&&!todasZonas.includes(p.zona))todasZonas.push(p.zona);});
+    
+    if(!todasZonas.length){
+      container.innerHTML='<div class="empty"><i class="ti ti-map-pin"></i><p>Sin clientes registrados</p></div>';
+      return;
+    }
+
+    const mesAct=getMesActual();
+    container.innerHTML=todasZonas.map((z,i)=>{
+      const clientes=pagos.filter(p=>p.zona===z);
+      const pagados=clientes.filter(p=>getPagoEstado(p)==='pagado').length;
+      const pendientes=clientes.filter(p=>getPagoEstado(p)==='pendiente').length;
+      const vencidos=clientes.filter(p=>getPagoEstado(p)==='vencido').length;
+      const totalMes=clientes.reduce((sum,p)=>sum+(p.historial&&p.historial[mesAct]?Number(p.historial[mesAct].monto||0):0),0);
+      return `<div onclick="abrirZona('${z}')" style="background:var(--surface);margin:0 12px 10px;border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:border-color .15s" onmouseenter="this.style.borderColor='var(--cyan)'" onmouseleave="this.style.borderColor='var(--border)'">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span style="font-size:16px;font-weight:700;color:var(--text)">${z}</span>
+          <span style="font-size:13px;font-weight:600;color:var(--cyan)">$${totalMes.toLocaleString()} este mes</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--blue-bg);color:var(--blue-txt)">${clientes.length} clientes</span>
+          ${pagados>0?`<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green-bg);color:var(--green-txt)">✓ ${pagados} pagados</span>`:''}
+          ${pendientes>0?`<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--amber-bg);color:var(--amber-txt)">⏳ ${pendientes} pendientes</span>`:''}
+          ${vencidos>0?`<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--red-bg);color:var(--red-txt)">⚠ ${vencidos} vencidos</span>`:''}
+        </div>
+      </div>`;
+    }).join('');
+
+  } else {
+    // Lista de clientes (zona activa, búsqueda o lista completa)
+    let list=[...pagos];
+    if(zonaActiva) list=list.filter(p=>p.zona===zonaActiva);
+    if(curFilterP!=='todos') list=list.filter(p=>getPagoEstado(p)===curFilterP);
+    list.sort((a,b)=>(a.num||0)-(b.num||0));
+
+    const backBtn=zonaActiva?`<div onclick="cerrarZona()" style="display:flex;align-items:center;gap:6px;padding:0 12px 8px;cursor:pointer;color:var(--cyan);font-size:13px;font-weight:600"><i class="ti ti-arrow-left"></i>Volver a zonas</div>`:'';
+    const titulo=zonaActiva?`<div style="padding:0 12px 8px;font-size:15px;font-weight:700;color:var(--text)"><i class="ti ti-map-pin" style="color:var(--cyan);margin-right:4px"></i>${zonaActiva} — ${list.length} clientes</div>`:'';
+
+    container.innerHTML=backBtn+titulo+(list.length?list.map(pagoCard).join(''):'<div class="empty"><i class="ti ti-cash"></i><p>Sin clientes en esta zona</p></div>');
+  }
+};
+
+window.buscarPago=function(q){
+  const searchQ=(q||'').toLowerCase().trim();
+  const container=document.getElementById('pagos-list');
+  if(!searchQ){
+    renderPagos();
+    return;
+  }
+  // Filter all pagos by name or phone
+  let list=pagos.filter(p=>
+    (p.nombre||'').toLowerCase().includes(searchQ)||
+    (p.tel||'').includes(searchQ)
+  );
+  list.sort((a,b)=>(a.num||0)-(b.num||0));
+  if(!list.length){
+    container.innerHTML='<div class="empty"><i class="ti ti-search"></i><p>No se encontraron clientes</p></div>';
+    return;
+  }
+  container.innerHTML=list.map(pagoCard).join('');
+};
+
+window.abrirZona=function(z){
+  zonaActiva=z;
+  pagosView='lista';
+  renderPagos();
+};
+
+window.cerrarZona=function(){
+  zonaActiva=null;
+  pagosView='zonas';
+  document.getElementById('btn-view-zonas').classList.add('active');
+  document.getElementById('btn-view-lista').classList.remove('active');
+  renderPagos();
+};
+
+window.openNewPago=function(){
+  ['pn','pnum','pprecio'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('newPagoOv').classList.add('open');
+};
+
+window.createPago=async function(){
+  const n=document.getElementById('pn').value.trim();
+  if(!n){toast('Ingresa el nombre del cliente');return}
+  await addDoc(collection(db,'pagos'),{
+    nombre:n,
+    num:Number(document.getElementById('pnum').value)||pagos.length+1,
+    paquete:document.getElementById('ppaq').value,
+    precio:Number(document.getElementById('pprecio').value)||0,
+    fdpago:document.getElementById('pfdpago').value,
+    fdcorte:document.getElementById('pfdcorte').value,
+    zona:document.getElementById('pzona').value,
+    historial:{},
+    fecha:serverTimestamp()
+  });
+  document.getElementById('newPagoOv').classList.remove('open');
+  toast('Cliente registrado');
+};
+
+window.openPagoDetail=function(id){
+  const p=pagos.find(x=>x.id===id);if(!p)return;
+  document.getElementById('rp-id').value=id;
+  document.getElementById('regPago-title').textContent=`Pago — ${p.nombre}`;
+  document.getElementById('rp-monto').value=p.precio||'';
+  document.getElementById('rp-mes').value=getMesActual();
+  document.getElementById('rp-nota').value='';
+  comprobanteData=null;
+  document.getElementById('comprobante-preview').innerHTML='';
+  document.getElementById('comprobante-section').style.display='none';
+  selectMetodo('Efectivo',document.getElementById('mp-efectivo'));
+  const hoy=new Date();
+  document.getElementById('rp-fecha').value=hoy.toISOString().split('T')[0];
+
+  // Build historial section
+  const hist=p.historial||{};
+  const mesesConPago=MESES.filter(m=>hist[m]);
+  const histHTML=mesesConPago.length?`
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Historial de pagos</div>
+      ${mesesConPago.map(m=>{
+        const pg=hist[m];
+        return `<div style="background:var(--surface2);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:13px;font-weight:700;color:var(--text);text-transform:capitalize">${m}</span>
+            <span style="font-size:13px;font-weight:700;color:var(--green)">$${pg.monto}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text3);display:flex;gap:8px;flex-wrap:wrap">
+            <span>${pg.metodo==='Transferencia'?'🏦':'💵'} ${pg.metodo}</span>
+            <span>📅 ${pg.fecha}</span>
+            ${pg.nota?`<span>📝 ${pg.nota}</span>`:''}
+          </div>
+          ${pg.comprobante?`<div style="margin-top:8px"><img src="${pg.comprobante}" style="width:100%;max-height:160px;object-fit:contain;border-radius:8px;border:1px solid var(--border)"></div>`:''}
+        </div>`;
+      }).join('')}
+    </div>`:'';
+
+  document.getElementById('regPago-historial').innerHTML=histHTML;
+  document.getElementById('regPagoOv').classList.add('open');
+};
+
+let comprobanteData=null;
+
+window.selectMetodo=function(m,el){
+  document.getElementById('rp-metodo').value=m;
+  document.getElementById('mp-efectivo').style.borderColor='var(--border)';
+  document.getElementById('mp-efectivo').style.background='var(--surface2)';
+  document.getElementById('mp-efectivo').style.color='var(--text2)';
+  document.getElementById('mp-transferencia').style.borderColor='var(--border)';
+  document.getElementById('mp-transferencia').style.background='var(--surface2)';
+  document.getElementById('mp-transferencia').style.color='var(--text2)';
+  el.style.borderColor='var(--blue)';
+  el.style.background='var(--blue-bg)';
+  el.style.color='var(--blue-txt)';
+  document.getElementById('comprobante-section').style.display=m==='Transferencia'?'block':'none';
+  if(m==='Efectivo'){comprobanteData=null;document.getElementById('comprobante-preview').innerHTML='';}
+};
+
+window.previewComprobante=function(inp){
+  const f=inp.files[0];if(!f)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      const MAX=800;let w=img.width,h=img.height;
+      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      comprobanteData=canvas.toDataURL('image/jpeg',0.7);
+      document.getElementById('comprobante-preview').innerHTML=`
+        <div style="position:relative;display:inline-block;margin-top:6px">
+          <img src="${comprobanteData}" style="width:100%;max-height:200px;object-fit:contain;border-radius:var(--r-sm);border:1px solid var(--border)">
+          <div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);color:#fff;border-radius:20px;padding:3px 8px;font-size:11px;font-weight:600">✓ Comprobante</div>
+        </div>`;
+    };img.src=e.target.result;
+  };reader.readAsDataURL(f);
+};
+
+window.savePagoMensual=async function(){
+  const id=document.getElementById('rp-id').value;
+  const mes=document.getElementById('rp-mes').value;
+  const monto=document.getElementById('rp-monto').value;
+  const fecha=document.getElementById('rp-fecha').value;
+  const metodo=document.getElementById('rp-metodo').value;
+  const nota=document.getElementById('rp-nota').value;
+  const p=pagos.find(x=>x.id===id);if(!p)return;
+  const historial={...(p.historial||{})};
+  const pagoData={monto:Number(monto),fecha,metodo,nota};
+  if(comprobanteData) pagoData.comprobante=comprobanteData;
+  historial[mes]=pagoData;
+  await updateDoc(doc(db,'pagos',id),{historial});
+  document.getElementById('regPagoOv').classList.remove('open');
+  comprobanteData=null;
+  toast(`Pago ${metodo} de ${mes} registrado`);
+  renderPagos();
+};
+
+
+
+// ===== SUPER ADMIN =====
+let egresos=[];
+
+onSnapshot(query(collection(db,'egresos'),orderBy('fecha','desc')),snap=>{
+  egresos=snap.docs.map(d=>({id:d.id,...d.data()}));
+  if(document.getElementById('screen-super').classList.contains('active')) renderSuper();
+});
+
+window.renderSuper=function(){
+  const mesAct=getMesActual();
+  const mesActIdx=new Date().getMonth();
+
+  // KPIs
+  const totalClientes=pagos.length;
+  const pagados=pagos.filter(p=>getPagoEstado(p)==='pagado').length;
+  const vencidos=pagos.filter(p=>getPagoEstado(p)==='vencido').length;
+  const ingresosMes=pagos.reduce((s,p)=>s+(p.historial&&p.historial[mesAct]?Number(p.historial[mesAct].monto||0):0),0);
+  const egresosMes=egresos.filter(e=>{
+    if(!e.fecha) return false;
+    const d=new Date(e.fecha);
+    return d.getMonth()===mesActIdx && d.getFullYear()===new Date().getFullYear();
+  }).reduce((s,e)=>s+Number(e.monto||0),0);
+  const utilidad=ingresosMes-egresosMes;
+  const ticketsAbiertos=tickets.filter(t=>t.status!=='cerrado').length;
+  const instMes=instalaciones.filter(i=>i.status!=='completada').length;
+
+  const kpiCard=(icon,label,value,color,sub='')=>`
+    <div style="background:rgba(10,20,40,0.82);border:1px solid ${color}33;border-radius:14px;padding:16px;position:relative;overflow:hidden;backdrop-filter:blur(8px)">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,${color},transparent)"></div>
+      <div style="font-size:20px;margin-bottom:8px">${icon}</div>
+      <div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">${label}</div>
+      <div style="font-size:26px;font-weight:800;color:${color};letter-spacing:-1px">${value}</div>
+      ${sub?`<div style="font-size:10px;color:var(--text3);margin-top:4px">${sub}</div>`:''}
+    </div>`;
+  document.getElementById('super-kpis').innerHTML=
+    kpiCard('💰',`Ingresos ${MESES_CORTO[mesActIdx]}`,`$${ingresosMes.toLocaleString()}`,'#22c55e')+
+    kpiCard('📤',`Egresos ${MESES_CORTO[mesActIdx]}`,`$${egresosMes.toLocaleString()}`,'#ef4444')+
+    kpiCard('📊','Utilidad neta',`$${utilidad.toLocaleString()}`,utilidad>=0?'#22d3ee':'#f59e0b')+
+    kpiCard('👥','Total clientes',totalClientes,'#3b82f6',`✓${pagados} pagados · ⚠${vencidos} vencidos`);
+
+  // Balance visual
+  const pct=ingresosMes>0?Math.min(Math.round(egresosMes/ingresosMes*100),100):0;
+  document.getElementById('super-balance').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:12px;color:var(--text3);font-weight:600">EGRESOS VS INGRESOS</span>
+      <span style="font-size:14px;font-weight:800;color:${pct>80?'#ef4444':pct>60?'#f59e0b':'#22c55e'}">${pct}%</span>
+    </div>
+    <div style="height:10px;background:rgba(6,13,26,0.6);border-radius:5px;overflow:hidden;margin-bottom:14px;border:1px solid rgba(56,189,248,0.1)">
+      <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${pct>80?'#ef4444':pct>60?'#f59e0b':'#22c55e'},${pct>80?'#b91c1c':pct>60?'#d97706':'#16a34a'});border-radius:5px;transition:width .8s;box-shadow:0 0 8px ${pct>80?'#ef4444':pct>60?'#f59e0b':'#22c55e'}66"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div style="text-align:center;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:10px 6px">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px">INGRESOS</div>
+        <div style="font-size:15px;font-weight:800;color:#22c55e">$${ingresosMes.toLocaleString()}</div>
+      </div>
+      <div style="text-align:center;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 6px">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px">EGRESOS</div>
+        <div style="font-size:15px;font-weight:800;color:#ef4444">$${egresosMes.toLocaleString()}</div>
+      </div>
+      <div style="text-align:center;background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.2);border-radius:10px;padding:10px 6px">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px">UTILIDAD</div>
+        <div style="font-size:15px;font-weight:800;color:#22d3ee">$${utilidad.toLocaleString()}</div>
+      </div>
+    </div>`;
+
+  // Ingresos por zona
+  const zonaMap={};
+  pagos.forEach(p=>{
+    if(!zonaMap[p.zona]) zonaMap[p.zona]={total:0,clientes:0};
+    zonaMap[p.zona].clientes++;
+    if(p.historial&&p.historial[mesAct]) zonaMap[p.zona].total+=Number(p.historial[mesAct].monto||0);
+  });
+  const zonaList=Object.entries(zonaMap).sort((a,b)=>b[1].total-a[1].total);
+  const maxZ=zonaList[0]?zonaList[0][1].total:1;
+  document.getElementById('super-zonas').innerHTML=zonaList.map(([z,d],i)=>`
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+        <span style="color:var(--text);font-weight:600">${z} <span style="color:var(--text3);font-size:11px">${d.clientes} clientes</span></span>
+        <span style="font-weight:800;color:${COLORS[i%COLORS.length]}">$${d.total.toLocaleString()}</span>
+      </div>
+      <div style="height:7px;background:rgba(6,13,26,0.6);border-radius:4px;overflow:hidden;border:1px solid rgba(56,189,248,0.08)">
+        <div style="height:100%;width:${maxZ>0?Math.round(d.total/maxZ*100):0}%;background:${COLORS[i%COLORS.length]};border-radius:4px;box-shadow:0 0 6px ${COLORS[i%COLORS.length]}66"></div>
+      </div>
+    </div>`).join('');
+
+  // Egresos del mes
+  const egresosMesArr=egresos.filter(e=>{
+    if(!e.fecha) return false;
+    const d=new Date(e.fecha);
+    return d.getMonth()===mesActIdx && d.getFullYear()===new Date().getFullYear();
+  });
+  document.getElementById('sc-egresos').textContent='$'+egresosMes.toLocaleString();
+  document.getElementById('egresos-list').innerHTML=egresosMesArr.length?egresosMesArr.map(e=>`
+    <div style="background:var(--surface);margin:0 12px 8px;border:1px solid var(--border);border-radius:var(--r);padding:13px 14px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--text)">${e.concepto}</div>
+        <div style="font-size:12px;color:var(--text3)">${e.desc||''} · ${e.fecha} · ${e.metodo}</div>
+      </div>
+      <span style="font-size:15px;font-weight:800;color:var(--red)">-$${Number(e.monto||0).toLocaleString()}</span>
+    </div>`).join(''):'<div class="empty" style="padding:20px"><p>Sin egresos registrados este mes</p></div>';
+
+  // Equipos para recuperar (suspendidos > 10 dias)
+  const hoy=new Date();
+  const recuperar=pagos.filter(p=>{
+    if(p.status!=='suspendido') return false;
+    if(!p.fechaSuspension) return false;
+    const fs=new Date(p.fechaSuspension);
+    const dias=Math.floor((hoy-fs)/(1000*60*60*24));
+    return dias>=10;
+  });
+  document.getElementById('sc-recuperar').textContent=recuperar.length;
+  document.getElementById('recuperar-list').innerHTML=recuperar.length?recuperar.map(p=>`
+    <div style="background:var(--surface);margin:0 12px 8px;border:1px solid rgba(239,68,68,.3);border-radius:var(--r);padding:13px 14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:15px;font-weight:700;color:var(--text)">${p.nombre}</span>
+        <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--red-bg);color:var(--red-txt)">RECUPERAR</span>
+      </div>
+      <div style="font-size:12px;color:var(--text3)">${p.zona} · ${p.paquete}</div>
+      <button onclick="crearTicketRecuperacion('${p.id}','${p.nombre}','${p.zona}')" style="margin-top:8px;background:var(--red-bg);border:1px solid rgba(239,68,68,.3);color:var(--red-txt);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;width:100%">
+        <i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Crear ticket de recuperación
+      </button>
+    </div>`).join(''):'<div class="empty" style="padding:20px"><p>Sin equipos pendientes de recuperar</p></div>';
+};
+
+window.openNewEgreso=function(){
+  document.getElementById('eg-desc').value='';
+  document.getElementById('eg-monto').value='';
+  document.getElementById('eg-concepto').value='';
+  document.getElementById('eg-fecha').value=new Date().toISOString().split('T')[0];
+  document.getElementById('newEgresoOv').classList.add('open');
+};
+
+window.saveEgreso=async function(){
+  const concepto=document.getElementById('eg-concepto').value;
+  const monto=document.getElementById('eg-monto').value;
+  if(!concepto||!monto){toast('Completa concepto y monto');return}
+  await addDoc(collection(db,'egresos'),{
+    concepto, desc:document.getElementById('eg-desc').value,
+    monto:Number(monto), fecha:document.getElementById('eg-fecha').value,
+    metodo:document.getElementById('eg-metodo').value,
+    fechaReg:serverTimestamp()
+  });
+  document.getElementById('newEgresoOv').classList.remove('open');
+  toast('Egreso registrado');
+};
+
+window.crearTicketRecuperacion=async function(pagoId,nombre,zona){
+  await addDoc(collection(db,'tickets'),{
+    cliente:nombre, tel:'—', dir:'—', zona:zona,
+    falla:'Recuperación de equipo',
+    desc:`Cliente suspendido más de 10 días. Recuperar módem y equipo instalado.`,
+    status:'nuevo', tec:'', pri:'urgente',
+    fecha:serverTimestamp(), hist:[],
+    tipo:'recuperacion', pagoId:pagoId
+  });
+  toast(`Ticket de recuperación creado para ${nombre}`);
+  renderSuper();
+};
+
+window.generarCorte=function(){
+  const mesAct=getMesActual();
+  const mesActIdx=new Date().getMonth();
+  const ingresos=pagos.reduce((s,p)=>s+(p.historial&&p.historial[mesAct]?Number(p.historial[mesAct].monto||0):0),0);
+  const egresosArr=egresos.filter(e=>{
+    if(!e.fecha) return false;
+    const d=new Date(e.fecha);
+    return d.getMonth()===mesActIdx && d.getFullYear()===new Date().getFullYear();
+  });
+  const egresosTotal=egresosArr.reduce((s,e)=>s+Number(e.monto||0),0);
+  const utilidad=ingresos-egresosTotal;
+  alert(`CORTE ${mesAct.toUpperCase()} ${new Date().getFullYear()}\n\n` +
+    `INGRESOS: $${ingresos.toLocaleString()}\n` +
+    `EGRESOS: $${egresosTotal.toLocaleString()}\n` +
+    `UTILIDAD: $${utilidad.toLocaleString()}\n\n` +
+    `Clientes totales: ${pagos.length}\n` +
+    `Tickets abiertos: ${tickets.filter(t=>t.status!=='cerrado').length}`);
+};
+
+
+
+// Auto-detect suspended clients for recovery tickets
+function checkRecuperaciones(){
+  const hoy=new Date();
+  pagos.forEach(async p=>{
+    if(p.status==='suspendido'&&p.fechaSuspension){
+      const fs=new Date(p.fechaSuspension);
+      const dias=Math.floor((hoy-fs)/(1000*60*60*24));
+      if(dias>=10&&!p.ticketRecuperacionCreado){
+        // Create recovery ticket automatically
+        await addDoc(collection(db,'tickets'),{
+          cliente:p.nombre, tel:p.tel||'—', dir:p.dir||'—', zona:p.zona,
+          falla:'Recuperación de equipo',
+          desc:`Cliente suspendido ${dias} días. Recuperar módem y equipo instalado.`,
+          status:'nuevo', tec:'', pri:'urgente',
+          fecha:serverTimestamp(), hist:[], tipo:'recuperacion', pagoId:p.id
+        });
+        await updateDoc(doc(db,'pagos',p.id),{ticketRecuperacionCreado:true});
+        toast(`⚠ Ticket urgente creado: Recuperar equipo de ${p.nombre}`);
+      }
+    }
+  });
+}
+
+// ===== INSTALACIONES =====
+let selFotosInst=[], curFilterI='todos';
+
+function loadInst(){
+  // loaded in loadData
+}
+
+function iCard(inst){
+  const tec=tecs.find(x=>x.id===inst.tec);
+  const statusColors={pendiente:'#3b82f6',proceso:'#a855f7',completada:'#22c55e'};
+  const statusLabels={pendiente:'Pendiente',proceso:'En proceso',completada:'Completada'};
+  const sc=statusColors[inst.status]||'#64748b';
+  const sl=statusLabels[inst.status]||inst.status;
+  const tecAv=tec?`<div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:50%;background:${col(inst.tec)}22;color:${col(inst.tec)};font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1.5px solid ${col(inst.tec)}44">${ini(tec.nombre)}</div><span style="font-size:12px;color:var(--text2);font-weight:600">${tec.nombre.split(' ')[0]}</span></div>`
+    :`<span style="font-size:11px;color:var(--text3);font-style:italic">Sin asignar</span>`;
+  return `<div onclick="openInstDetail('${inst.id}')" style="border-left:3px solid ${sc};background:rgba(10,20,40,0.75);margin:0 12px 5px;border-radius:12px;border:1px solid rgba(56,189,248,0.1);overflow:hidden;cursor:pointer;transition:all .18s;backdrop-filter:blur(8px)"
+    onmouseenter="this.style.background='rgba(15,30,55,0.92)';this.style.borderColor='rgba(56,189,248,0.28)'"
+    onmouseleave="this.style.background='rgba(10,20,40,0.75)';this.style.borderColor='rgba(56,189,248,0.1)'">
+    <div style="padding:11px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:32px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${sc};box-shadow:0 0 7px ${sc}99"></div>
+        <span style="font-size:9px;color:var(--text3);font-family:monospace;font-weight:700">${inst.id.substring(0,6).toUpperCase()}</span>
+      </div>
+      <div style="min-width:0">
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">${inst.nombre}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#38bdf8;display:flex;align-items:center;gap:3px"><i class="ti ti-wifi" style="font-size:12px"></i>${inst.plan||'Sin plan'}</span>
+          <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:3px"><i class="ti ti-map-pin" style="font-size:11px"></i>${inst.zona||'—'}</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">
+        <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:${sc}1a;color:${sc};border:1px solid ${sc}44;white-space:nowrap">${sl}</span>
+        ${tecAv}
+      </div>
+    </div>
+  </div>`;
+}
+
+window.renderInst=function(){
+  let list=[...instalaciones];
+  if(curFilterI!=='todos') list=list.filter(i=>i.status===curFilterI);
+  document.getElementById('inst-list').innerHTML=list.length?list.map(iCard).join(''):'<div class="empty"><i class="ti ti-tools"></i><p>Sin instalaciones registradas</p></div>';
+};
+
+window.setFI=function(f,el){
+  curFilterI=f;
+  document.querySelectorAll('#screen-inst .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderInst();
+};
+
+window.openNewInst=function(){
+  ['in-nombre','in-tel','in-dir','in-maps','in-notas','in-serie'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('in-zona').value='';
+  document.getElementById('in-plan').value='';
+  document.getElementById('in-equipo').value='';
+  selFotosInst=[];
+  document.getElementById('fpreview-inst').innerHTML='';
+  const sel=document.getElementById('in-tec');
+  sel.innerHTML='<option value="">Sin asignar</option>'+tecs.map(tc=>`<option value="${tc.id}">${tc.nombre} — ${tc.zona}</option>`).join('');
+  document.getElementById('newInstOv').classList.add('open');
+};
+
+window.createInst=async function(){
+  if(currentRole!=='admin'){toast('Sin permisos para crear instalaciones');return}
+  const n=document.getElementById('in-nombre').value.trim();
+  const z=document.getElementById('in-zona').value;
+  const p=document.getElementById('in-plan').value;
+  if(!n||!z){toast('Completa nombre y zona');return}
+  await addDoc(collection(db,'instalaciones'),{
+    nombre:n, tel:document.getElementById('in-tel').value||'—',
+    dir:document.getElementById('in-dir').value||'—',
+    maps:document.getElementById('in-maps').value.trim()||'',
+    zona:z, plan:p,
+    equipo:document.getElementById('in-equipo').value||'—',
+    serie:document.getElementById('in-serie').value.trim()||'',
+    tec:document.getElementById('in-tec').value,
+    notas:document.getElementById('in-notas').value||'',
+    fotos:[...selFotosInst],
+    status:'pendiente', fecha:serverTimestamp()
+  });
+  document.getElementById('newInstOv').classList.remove('open');
+  toast('Instalación registrada');
+};
+
+window.addFotosInst=function(inp){
+  Array.from(inp.files).forEach(f=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        const MAX=600;let w=img.width,h=img.height;
+        if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        const compressed=canvas.toDataURL('image/jpeg',0.6);
+        selFotosInst.push(compressed);
+        const prev=document.getElementById('fpreview-inst');
+        const i=selFotosInst.length-1;
+        const d=document.createElement('div');d.className='fthumb';
+        d.innerHTML=`<img src="${compressed}"><button class="fdel" onclick="delFotoInst(${i})">×</button>`;
+        prev.appendChild(d);
+      };img.src=e.target.result;
+    };reader.readAsDataURL(f);
+  });
+};
+
+window.delFotoInst=function(i){
+  selFotosInst.splice(i,1);
+  document.getElementById('fpreview-inst').innerHTML=selFotosInst.map((f,j)=>`<div class="fthumb"><img src="${f}"><button class="fdel" onclick="delFotoInst(${j})">×</button></div>`).join('');
+};
+
+window.openInstDetail=function(id){
+  const inst=instalaciones.find(x=>x.id===id);if(!inst)return;
+  const tec=tecs.find(x=>x.id===inst.tec);
+  const slbl={pendiente:'Pendiente',proceso:'En proceso',completada:'Completada'};
+  const scls={pendiente:'p-nuevo',proceso:'p-proceso',completada:'p-cerrado'};
+  document.getElementById('inst-did').textContent=id.substring(0,8).toUpperCase();
+  document.getElementById('inst-dbody').innerHTML=`
+    <div class="detail-section" style="margin-top:10px">
+      <div class="ds-title">Cliente</div>
+      <div class="ds-row"><span class="ds-key">Nombre</span><span class="ds-val">${inst.nombre}</span></div>
+      <div class="ds-row"><span class="ds-key">Teléfono</span><span class="ds-val" style="color:var(--cyan)">${inst.tel||'—'}</span></div>
+      <div class="ds-row"><span class="ds-key">Dirección</span><span class="ds-val">${inst.dir||'—'}</span></div>
+      <div class="ds-row"><span class="ds-key">Zona</span><span class="ds-val">${inst.zona||'—'}</span></div>
+      ${inst.maps?`<div class="ds-row"><span class="ds-key">Ubicación</span><span class="ds-val"><a href="${inst.maps}" target="_blank" style="color:var(--cyan);font-weight:700;display:flex;align-items:center;gap:4px;justify-content:flex-end"><i class="ti ti-map-pin" style="font-size:14px"></i>Ver en Maps</a></span></div>`:''}
+    </div>
+    <div class="detail-section">
+      <div class="ds-title">Instalación</div>
+      <div class="ds-row"><span class="ds-key">Estado</span><span class="ds-val"><span class="pill ${scls[inst.status]||'p-nuevo'}">${slbl[inst.status]||inst.status}</span></span></div>
+      <div class="ds-row"><span class="ds-key">Plan</span><span class="ds-val">${inst.plan||'—'}</span></div>
+      <div class="ds-row"><span class="ds-key">Equipo</span><span class="ds-val">${inst.equipo||'—'}</span></div>
+      ${inst.serie?`<div class="ds-row"><span class="ds-key">No. Serie</span><span class="ds-val" style="font-family:monospace;color:var(--cyan)">${inst.serie}</span></div>`:''}
+      <div class="ds-row"><span class="ds-key">Técnico</span><span class="ds-val">${tec?tec.nombre:'Sin asignar'}</span></div>
+      ${inst.notas?`<div class="ds-row" style="flex-direction:column;gap:5px"><span class="ds-key">Notas</span><span style="font-size:13px;color:var(--text2);line-height:1.5">${inst.notas}</span></div>`:''}
+    </div>
+    ${inst.fotos&&inst.fotos.length?`<div class="detail-section"><div class="ds-title">Fotografías</div><div style="padding:12px;display:flex;gap:8px;flex-wrap:wrap">${inst.fotos.map(f=>`<div class="hphoto" style="width:80px;height:80px"><img src="${f}"></div>`).join('')}</div></div>`:''}
+    <div style="padding:0 12px 8px;display:flex;flex-wrap:wrap">
+      ${inst.status!=='completada'?`<button class="btn btn-green btn-sm" onclick="completarInst('${inst.id}')"><i class="ti ti-check" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Marcar completada</button>`:''}
+      ${inst.status==='pendiente'?`<button class="btn btn-blue btn-sm" onclick="iniciarInst('${inst.id}')"><i class="ti ti-player-play" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Iniciar</button>`:''}
+    </div>`;
+  document.getElementById('detailInstOv').classList.add('open');
+};
+
+window.completarInst=async function(id){
+  await updateDoc(doc(db,'instalaciones',id),{status:'completada'});
+  toast('Instalación completada');
+  document.getElementById('detailInstOv').classList.remove('open');
+};
+
+window.iniciarInst=async function(id){
+  await updateDoc(doc(db,'instalaciones',id),{status:'proceso'});
+  toast('Instalación en proceso');
+  document.getElementById('detailInstOv').classList.remove('open');
+};
+
+
+</script>
+</body>
+</html>
