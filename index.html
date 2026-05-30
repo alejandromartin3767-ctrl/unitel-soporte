@@ -886,7 +886,12 @@ input[type=file]{display:none}
       <div style="font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.3px">Resumen ejecutivo</div>
       <div style="font-size:11px;color:var(--text3);margin-top:1px" id="super-fecha-hoy"></div>
     </div>
-    <button class="btn btn-blue btn-sm" onclick="generarCorte()"><i class="ti ti-file-invoice" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Corte del mes</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-blue btn-sm" onclick="generarCorte()"><i class="ti ti-file-invoice" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Corte del mes</button>
+      <button onclick="sincronizarMikrotik()" style="padding:6px 12px;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.4);border-radius:8px;color:#d8b4fe;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px">
+        <i class="ti ti-router" style="font-size:13px"></i>Sincronizar MikroTik
+      </button>
+    </div>
   </div>
 
   <!-- KPIs -->
@@ -1536,6 +1541,8 @@ function loadData(){
   onSnapshot(query(collection(db,'tickets'),orderBy('fecha','desc')),snap=>{
     tickets=snap.docs.map(d=>({id:d.id,...d.data()}));
     renderDash();renderAll();renderZonas();
+    // Re-intentar crear tickets recuperación ahora que tickets está actualizado
+    autoCrearTicketsRecuperacion();
   });
   onSnapshot(collection(db,'tecnicos'),snap=>{
     tecs=snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -1678,7 +1685,7 @@ window.renderAll=function(){
   const scRec=document.getElementById('sc-recuperar-tickets');
   if(scRec) scRec.textContent=recList.length;
   const recSection=document.getElementById('recuperar-tickets-section');
-  if(recSection) recSection.style.display=recList.length?'block':'none';
+  if(recSection) recSection.style.display=recList.length>0?'block':'none';
   const recListEl=document.getElementById('recuperar-tickets-list');
   if(recListEl){
     recListEl.innerHTML=recList.length?recList.map(t=>{
@@ -2568,6 +2575,80 @@ window.crearTicketRecuperacion=async function(pagoId,nombre,zona){
   });
   toast(`Ticket de recuperación creado para ${nombre}`);
   renderSuper();
+};
+
+window.sincronizarMikrotik=async function(){
+  const btn=event.target.closest('button');
+  const orig=btn.innerHTML;
+  btn.innerHTML='<i class="ti ti-loader"></i> Generando...';
+  btn.disabled=true;
+  try{
+    const hoy=new Date();
+    const mesAct=getMesActual();
+    // Construir lista de vencidos con pppoeUser
+    const vencidos=pagos.filter(p=>{
+      if(p.historial&&p.historial[mesAct]) return false;
+      const corte=parseInt((p.fdcorte||'').replace(/[^0-9]/g,''))||4;
+      const fechaCorte=new Date(hoy.getFullYear(),hoy.getMonth(),corte);
+      return hoy>fechaCorte;
+    }).map(p=>({
+      nombre:p.nombre,
+      pppoeUser:p.pppoeUser||p.nombre,
+      zona:p.zona||'',
+      dias:Math.floor((hoy-new Date(hoy.getFullYear(),hoy.getMonth(),parseInt((p.fdcorte||'').replace(/[^0-9]/g,''))||4))/(1000*60*60*24))
+    }));
+    const pagados=pagos.filter(p=>p.historial&&p.historial[mesAct]).map(p=>({
+      pppoeUser:p.pppoeUser||p.nombre
+    }));
+    const json={
+      generado:hoy.toISOString(),
+      mes:mesAct,
+      vencidos,
+      pagados,
+      total_vencidos:vencidos.length,
+      total_pagados:pagados.length
+    };
+    // Subir a GitHub
+    // Token guardado en localStorage — nunca en el código
+    let GITHUB_TOKEN=localStorage.getItem('gh_token_unitel')||'';
+    if(!GITHUB_TOKEN){
+      GITHUB_TOKEN=prompt('Ingresa tu GitHub Personal Access Token:');
+      if(!GITHUB_TOKEN){toast('Token requerido');btn.innerHTML=orig;btn.disabled=false;return;}
+      localStorage.setItem('gh_token_unitel',GITHUB_TOKEN);
+    }
+    const REPO='alejandromartin3767-ctrl/unitel-soporte';
+    const FILE='cortes.json';
+    // Obtener SHA del archivo si existe
+    let sha='';
+    try{
+      const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`,{
+        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
+      });
+      if(r.ok){const d=await r.json();sha=d.sha;}
+    }catch(e){}
+    // Subir archivo
+    const body={
+      message:'Actualizar cortes '+mesAct+' '+hoy.toLocaleDateString('es-MX'),
+      content:btoa(unescape(encodeURIComponent(JSON.stringify(json,null,2)))),
+      ...(sha?{sha}:{})
+    };
+    const res=await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`,{
+      method:'PUT',
+      headers:{'Authorization':'token '+GITHUB_TOKEN,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
+      body:JSON.stringify(body)
+    });
+    if(res.ok){
+      toast(`✅ Sincronizado — ${vencidos.length} vencidos, ${pagados.length} al corriente`);
+    } else {
+      const err=await res.json();
+      toast('Error: '+err.message);
+    }
+  }catch(e){
+    toast('Error: '+e.message);
+  }finally{
+    btn.innerHTML=orig;
+    btn.disabled=false;
+  }
 };
 
 window.generarCorte=function(){
