@@ -1541,8 +1541,8 @@ function loadData(){
   onSnapshot(query(collection(db,'tickets'),orderBy('fecha','desc')),snap=>{
     tickets=snap.docs.map(d=>({id:d.id,...d.data()}));
     renderDash();renderAll();renderZonas();
-    // Re-intentar crear tickets recuperación ahora que tickets está actualizado
-    autoCrearTicketsRecuperacion();
+    // Creación automática desactivada temporalmente
+  // autoCrearTicketsRecuperacion();
   });
   onSnapshot(collection(db,'tecnicos'),snap=>{
     tecs=snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -1984,8 +1984,8 @@ const MESES_CORTO=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','
 onSnapshot(query(collection(db,'pagos'),orderBy('num','asc')),snap=>{
   pagos=snap.docs.map(d=>({id:d.id,...d.data()}));
   if(document.getElementById('screen-pagos').classList.contains('active')) renderPagos();
-  // Crear tickets de recuperación automáticamente
-  autoCrearTicketsRecuperacion();
+  // Creación automática desactivada temporalmente
+  // autoCrearTicketsRecuperacion();
 });
 
 async function autoCrearTicketsRecuperacion(){
