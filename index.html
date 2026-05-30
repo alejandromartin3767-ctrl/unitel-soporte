@@ -1122,6 +1122,14 @@ input[type=file]{display:none}
         <option>Chinkindzonot</option>
       </select>
     </div>
+    <div class="fg">
+      <label class="flabel" style="display:flex;align-items:center;gap:6px">
+        <i class="ti ti-router" style="color:#38bdf8;font-size:13px"></i>
+        Usuario PPPoE (MikroTik)
+      </label>
+      <input class="finput" id="ppppoe" type="text" placeholder="JUAN GARCIA (nombre en MikroTik)" style="font-family:monospace;text-transform:uppercase">
+      <div style="font-size:10px;color:var(--text3);margin-top:4px">⚡ Se usará para cortes automáticos — debe coincidir exactamente con el nombre en MikroTik</div>
+    </div>
     <button class="btn btn-blue" onclick="createPago()">Registrar cliente</button>
     <button class="btn btn-outline" onclick="document.getElementById('newPagoOv').classList.remove('open')">Cancelar</button>
   </div>
@@ -1133,6 +1141,17 @@ input[type=file]{display:none}
     <div class="handle"></div>
     <div class="sheet-title" id="regPago-title">Registrar pago</div>
     <input type="hidden" id="rp-id">
+    <div class="fg" style="margin-bottom:12px">
+      <label class="flabel" style="display:flex;align-items:center;gap:6px">
+        <i class="ti ti-router" style="color:#a855f7;font-size:13px"></i>
+        Usuario PPPoE (MikroTik)
+      </label>
+      <div style="display:flex;gap:8px">
+        <input class="finput" id="rp-pppoe" type="text" placeholder="NOMBRE en MikroTik" style="font-family:monospace;text-transform:uppercase;flex:1">
+        <button onclick="savePppoeUser()" style="padding:0 14px;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.4);border-radius:var(--r-sm);color:#d8b4fe;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">Guardar</button>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:4px">⚡ Para cortes automáticos en MikroTik</div>
+    </div>
     <div class="frow">
       <div class="fg"><label class="flabel">Monto pagado</label><input class="finput" id="rp-monto" type="number" placeholder="300"></div>
       <div class="fg"><label class="flabel">Fecha de pago</label><input class="finput" id="rp-fecha" type="date"></div>
@@ -1269,6 +1288,21 @@ input[type=file]{display:none}
     <div class="fg"><label class="flabel">Número de serie del equipo</label>
       <input class="finput" id="in-serie" type="text" placeholder="Ej. RTX-2024-XXXXXX" style="font-family:monospace;letter-spacing:.5px">
     </div>
+    <div class="frow">
+      <div class="fg">
+        <label class="flabel" style="display:flex;align-items:center;gap:6px">
+          <i class="ti ti-router" style="color:#a855f7;font-size:13px"></i>
+          Usuario PPPoE (MikroTik)
+        </label>
+        <input class="finput" id="in-pppoe" type="text" placeholder="JUAN GARCIA" style="font-family:monospace;text-transform:uppercase">
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">⚡ Para cortes automáticos</div>
+      </div>
+      <div class="fg">
+        <label class="flabel">Precio mensual ($)</label>
+        <input class="finput" id="in-precio" type="number" placeholder="300">
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">Se usará al convertir a cliente</div>
+      </div>
+    </div>
     <div class="fg"><label class="flabel">Notas adicionales</label>
       <textarea class="ftextarea" id="in-notas" placeholder="Observaciones, accesorios adicionales, etc."></textarea>
     </div>
@@ -1398,7 +1432,7 @@ onAuthStateChanged(auth, async user=>{
 
 function applyRoleUI(){
   const isSuperAdmin=currentRole==='superadmin';
-  const isAdmin=currentRole==='admin';
+  const isAdmin=currentRole==='admin'||currentRole==='superadmin';
   // Quitar activo de todas las pestañas y pantallas
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -1782,7 +1816,7 @@ window.openNewTicket=function(){
 window.setPri=function(p,el){selPri=p;document.querySelectorAll('#newOv .pri-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active')};
 
 window.createTicket=async function(){
-  if(currentRole!=='admin'){toast('Sin permisos para crear tickets');return}
+  if(currentRole!=='admin'&&currentRole!=='superadmin'){toast('Sin permisos para crear tickets');return}
   const n=document.getElementById('fn').value.trim();
   const f=document.getElementById('ff').value;
   const z=document.getElementById('fz').value;
@@ -1869,6 +1903,7 @@ function pagoCard(p){
           <span style="font-size:12px;color:#38bdf8;display:flex;align-items:center;gap:3px"><i class="ti ti-wifi" style="font-size:12px"></i>${p.paquete||'—'}</span>
           <span style="font-size:11px;color:var(--text3)">$${p.precio||0}/mes</span>
           <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:2px"><i class="ti ti-map-pin" style="font-size:11px"></i>${p.zona||'—'}</span>
+          ${p.pppoeUser?`<span style="font-size:10px;color:#a855f7;font-family:monospace;background:rgba(168,85,247,0.1);padding:1px 6px;border-radius:4px;border:1px solid rgba(168,85,247,0.2)"><i class="ti ti-router" style="font-size:10px"></i> ${p.pppoeUser}</span>`:''}
         </div>
       </div>
       <!-- Estado -->
@@ -2015,7 +2050,7 @@ window.cerrarZona=function(){
 };
 
 window.openNewPago=function(){
-  ['pn','pnum','pprecio'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['pn','pnum','pprecio','ppppoe'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('newPagoOv').classList.add('open');
 };
 
@@ -2030,6 +2065,7 @@ window.createPago=async function(){
     fdpago:document.getElementById('pfdpago').value,
     fdcorte:document.getElementById('pfdcorte').value,
     zona:document.getElementById('pzona').value,
+    pppoeUser:(document.getElementById('ppppoe').value||'').trim().toUpperCase(),
     historial:{},
     fecha:serverTimestamp()
   });
@@ -2037,11 +2073,22 @@ window.createPago=async function(){
   toast('Cliente registrado');
 };
 
+window.savePppoeUser=async function(){
+  const id=document.getElementById('rp-id').value;
+  const val=(document.getElementById('rp-pppoe').value||'').trim().toUpperCase();
+  if(!id)return;
+  await updateDoc(doc(db,'pagos',id),{pppoeUser:val});
+  const p=pagos.find(x=>x.id===id);
+  if(p) p.pppoeUser=val;
+  toast(val?`PPPoE vinculado: ${val}`:'PPPoE eliminado');
+};
+
 window.openPagoDetail=function(id){
   const p=pagos.find(x=>x.id===id);if(!p)return;
   document.getElementById('rp-id').value=id;
   document.getElementById('regPago-title').textContent=`Pago — ${p.nombre}`;
   document.getElementById('rp-monto').value=p.precio||'';
+  const rpPppoe=document.getElementById('rp-pppoe');if(rpPppoe)rpPppoe.value=p.pppoeUser||'';
   document.getElementById('rp-mes').value=getMesActual();
   document.getElementById('rp-nota').value='';
   comprobanteData=null;
@@ -2404,7 +2451,7 @@ window.openNewInst=function(){
 };
 
 window.createInst=async function(){
-  if(currentRole!=='admin'){toast('Sin permisos para crear instalaciones');return}
+  if(currentRole!=='admin'&&currentRole!=='superadmin'){toast('Sin permisos para crear instalaciones');return}
   const n=document.getElementById('in-nombre').value.trim();
   const z=document.getElementById('in-zona').value;
   const p=document.getElementById('in-plan').value;
@@ -2418,6 +2465,8 @@ window.createInst=async function(){
     serie:document.getElementById('in-serie').value.trim()||'',
     tec:document.getElementById('in-tec').value,
     notas:document.getElementById('in-notas').value||'',
+    pppoeUser:(document.getElementById('in-pppoe').value||'').trim().toUpperCase(),
+    precio:Number(document.getElementById('in-precio').value)||0,
     fotos:[...selFotosInst],
     status:'pendiente', fecha:serverTimestamp()
   });
@@ -2462,7 +2511,13 @@ window.openInstDetail=function(id){
   document.getElementById('inst-dbody').innerHTML=`
     <div class="detail-section" style="margin-top:10px">
       <div class="ds-title">Cliente</div>
-      <div class="ds-row"><span class="ds-key">Nombre</span><span class="ds-val">${inst.nombre}</span></div>
+      <div class="ds-row" style="flex-direction:column;gap:6px">
+        <span class="ds-key">Nombre</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="inst-edit-nombre" class="finput" style="flex:1;padding:8px 10px;font-size:13px" value="${inst.nombre}">
+          <button onclick="guardarNombreInst('${inst.id}')" style="padding:6px 12px;background:rgba(56,189,248,0.2);border:1px solid rgba(56,189,248,0.4);border-radius:8px;color:#38bdf8;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">Guardar</button>
+        </div>
+      </div>
       <div class="ds-row"><span class="ds-key">Teléfono</span><span class="ds-val" style="color:var(--cyan)">${inst.tel||'—'}</span></div>
       <div class="ds-row"><span class="ds-key">Dirección</span><span class="ds-val">${inst.dir||'—'}</span></div>
       <div class="ds-row"><span class="ds-key">Zona</span><span class="ds-val">${inst.zona||'—'}</span></div>
@@ -2478,11 +2533,24 @@ window.openInstDetail=function(id){
       ${inst.notas?`<div class="ds-row" style="flex-direction:column;gap:5px"><span class="ds-key">Notas</span><span style="font-size:13px;color:var(--text2);line-height:1.5">${inst.notas}</span></div>`:''}
     </div>
     ${inst.fotos&&inst.fotos.length?`<div class="detail-section"><div class="ds-title">Fotografías</div><div style="padding:12px;display:flex;gap:8px;flex-wrap:wrap">${inst.fotos.map(f=>`<div class="hphoto" style="width:80px;height:80px"><img src="${f}"></div>`).join('')}</div></div>`:''}
-    <div style="padding:0 12px 8px;display:flex;flex-wrap:wrap">
+    ${inst.pppoeUser?`<div class="detail-section"><div class="ds-title">MikroTik PPPoE</div>
+      <div class="ds-row"><span class="ds-key">Usuario</span><span class="ds-val" style="font-family:monospace;color:#a855f7;font-weight:700">${inst.pppoeUser}</span></div>
+    </div>`:''}
+    <div style="padding:0 12px 16px;display:flex;flex-wrap:wrap;gap:8px">
       ${inst.status!=='completada'?`<button class="btn btn-green btn-sm" onclick="completarInst('${inst.id}')"><i class="ti ti-check" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Marcar completada</button>`:''}
       ${inst.status==='pendiente'?`<button class="btn btn-blue btn-sm" onclick="iniciarInst('${inst.id}')"><i class="ti ti-player-play" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Iniciar</button>`:''}
+      ${inst.status==='completada'?`<button class="btn btn-sm" style="background:rgba(34,197,94,0.2);border:1px solid rgba(34,197,94,0.4);color:#86efac;border-radius:var(--r-sm);padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer" onclick="convertirACliente('${inst.id}')"><i class="ti ti-user-plus" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Convertir a cliente</button>`:''}
     </div>`;
   document.getElementById('detailInstOv').classList.add('open');
+};
+
+window.guardarNombreInst=async function(id){
+  const nuevoNombre=document.getElementById('inst-edit-nombre').value.trim();
+  if(!nuevoNombre){toast('El nombre no puede estar vacío');return;}
+  await updateDoc(doc(db,'instalaciones',id),{nombre:nuevoNombre});
+  const inst=instalaciones.find(x=>x.id===id);
+  if(inst) inst.nombre=nuevoNombre;
+  toast('✅ Nombre actualizado');
 };
 
 window.completarInst=async function(id){
@@ -2495,6 +2563,43 @@ window.iniciarInst=async function(id){
   await updateDoc(doc(db,'instalaciones',id),{status:'proceso'});
   toast('Instalación en proceso');
   document.getElementById('detailInstOv').classList.remove('open');
+};
+
+window.convertirACliente=async function(id){
+  const inst=instalaciones.find(x=>x.id===id);
+  if(!inst){toast('Instalación no encontrada');return;}
+  const existe=pagos.find(p=>p.nombre.trim().toLowerCase()===inst.nombre.trim().toLowerCase());
+  if(existe&&!confirm(`Ya existe un cliente llamado "${inst.nombre}" en pagos. ¿Quieres crear uno nuevo de todas formas?`)){return;}
+  try{
+    // Mes actual para registrar pago de instalación
+    const hoy=new Date();
+    const mesActual=getMesActual();
+    const fechaHoy=hoy.toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'});
+    // Historial con mes corriente marcado como pagado (instalación = primer pago)
+    const historial={};
+    historial[mesActual]={
+      monto: inst.precio||0,
+      fecha: fechaHoy,
+      metodo: 'Efectivo',
+      nota: 'Pago de instalación — mes de alta',
+      ts: new Date().toISOString()
+    };
+    await addDoc(collection(db,'pagos'),{
+      nombre: inst.nombre,
+      num: pagos.length+1,
+      paquete: inst.plan||'—',
+      precio: inst.precio||0,
+      fdpago: '01 DE CADA MES',
+      fdcorte: '05 DE CADA MES',
+      zona: inst.zona||'',
+      tel: inst.tel||'',
+      pppoeUser: inst.pppoeUser||'',
+      historial,
+      fecha: serverTimestamp()
+    });
+    toast(`✅ Cliente creado y ${mesActual} marcado como pagado`);
+    document.getElementById('detailInstOv').classList.remove('open');
+  }catch(e){toast('Error: '+e.message);}
 };
 
 
