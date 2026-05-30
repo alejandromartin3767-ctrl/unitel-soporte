@@ -905,8 +905,8 @@ input[type=file]{display:none}
   </div>
 
   <!-- Resumen mensual -->
-  <div style="background:var(--surface);margin:0 12px 10px;border:1px solid var(--border);border-radius:var(--r);padding:14px">
-    <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Total ingreso por mes</div>
+  <div style="background:rgba(10,20,40,0.82);margin:0 12px 10px;border:1px solid rgba(56,189,248,0.13);border-radius:var(--r);padding:14px;backdrop-filter:blur(8px)">
+    <div style="font-size:11px;font-weight:700;color:#38bdf8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Total ingreso por mes</div>
     <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px" id="pagos-resumen"></div>
   </div>
 
@@ -924,7 +924,7 @@ input[type=file]{display:none}
 
   <!-- Buscador -->
   <div style="padding:0 12px 10px">
-    <div style="display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:0 14px">
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(10,20,40,0.8);border:1.5px solid rgba(56,189,248,0.15);border-radius:20px;padding:0 14px;backdrop-filter:blur(8px)">
       <i class="ti ti-search" style="color:var(--text3);font-size:16px"></i>
       <input id="pagos-search" type="text" placeholder="Buscar cliente por nombre o teléfono..." 
         style="border:none;background:transparent;color:var(--text);font-size:15px;padding:10px 0;outline:none;width:100%"
@@ -1847,26 +1847,36 @@ function getPagoEstado(p){
 
 function pagoCard(p){
   const estado=getPagoEstado(p);
-  const color={pagado:'var(--green)',pendiente:'var(--amber)',vencido:'var(--red)'}[estado];
-  const bgColor={pagado:'var(--green-bg)',pendiente:'var(--amber-bg)',vencido:'var(--red-bg)'}[estado];
+  const sc={pagado:'#22c55e',pendiente:'#f59e0b',vencido:'#ef4444'}[estado]||'#64748b';
+  const icon={pagado:'✓',pendiente:'⏳',vencido:'⚠'}[estado]||'—';
   const mesAct=getMesActual();
   const pagoMes=p.historial&&p.historial[mesAct];
   const metodoIcon=pagoMes?(pagoMes.metodo==='Transferencia'?'🏦':'💵'):'';
-  return `<div class="tcard">
-    <div class="tcard-head">
-      <div class="tcard-top">
-        <span class="tcard-id">#${p.num||'—'}</span>
-        <span onclick="event.stopPropagation();openPagoDetail('${p.id}')" style="cursor:pointer;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;background:${bgColor};color:${color};display:flex;align-items:center;gap:4px">
-          ${estado==='pagado'?'✓':estado==='vencido'?'⚠':'⏳'} ${estado.toUpperCase()} ${metodoIcon}
-        </span>
+  const borderColor=estado==='vencido'?'rgba(239,68,68,0.35)':estado==='pagado'?'rgba(34,197,94,0.2)':'rgba(245,158,11,0.2)';
+  return `<div onclick="openPagoDetail('${p.id}')" style="border-left:3px solid ${sc};background:rgba(10,20,40,0.78);margin:0 12px 5px;border-radius:12px;border:1px solid ${borderColor};overflow:hidden;cursor:pointer;transition:all .18s;backdrop-filter:blur(8px)"
+    onmouseenter="this.style.background='rgba(15,30,55,0.92)'"
+    onmouseleave="this.style.background='rgba(10,20,40,0.78)'">
+    <div style="padding:11px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center">
+      <!-- Numero -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:30px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${sc};box-shadow:0 0 7px ${sc}99"></div>
+        <span style="font-size:9px;color:var(--text3);font-family:monospace;font-weight:700">#${p.num||'—'}</span>
       </div>
-      <div class="tcard-name" onclick="openPagoDetail('${p.id}')" style="cursor:pointer">${p.nombre}</div>
-      <div class="tcard-falla"><span class="falla-dot" style="background:var(--cyan)"></span>${p.paquete||'—'} — $${p.precio||0}/mes</div>
-    </div>
-    <div class="tcard-body" onclick="openPagoDetail('${p.id}')" style="cursor:pointer">
-      <div class="tcard-loc"><i class="ti ti-map-pin"></i>${p.zona||'—'}</div>
-      <div style="font-size:12px;color:${pagoMes?'var(--green)':'var(--text3)'}">
-        ${pagoMes?`${metodoIcon} $${pagoMes.monto} — ${pagoMes.fecha}${pagoMes.comprobante?` <span style="color:var(--cyan);font-size:11px">📎 comprobante</span>`:''}` :'Sin pago este mes'}
+      <!-- Info -->
+      <div style="min-width:0">
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.nombre}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#38bdf8;display:flex;align-items:center;gap:3px"><i class="ti ti-wifi" style="font-size:12px"></i>${p.paquete||'—'}</span>
+          <span style="font-size:11px;color:var(--text3)">$${p.precio||0}/mes</span>
+          <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:2px"><i class="ti ti-map-pin" style="font-size:11px"></i>${p.zona||'—'}</span>
+        </div>
+      </div>
+      <!-- Estado -->
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">
+        <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:${sc}1a;color:${sc};border:1px solid ${sc}44;white-space:nowrap">${icon} ${estado.toUpperCase()}</span>
+        <span style="font-size:11px;color:${pagoMes?'#22c55e':'var(--text3)'}">
+          ${pagoMes?`${metodoIcon} $${pagoMes.monto}`:'Sin pago'}
+        </span>
       </div>
     </div>
   </div>`;
@@ -1900,9 +1910,10 @@ window.renderPagos=function(){
     const mesActIdx=new Date().getMonth();
     resumen.innerHTML=MESES.slice(0,mesActIdx+1).map((m,i)=>{
       const total=pagos.reduce((sum,p)=>sum+(p.historial&&p.historial[m]?Number(p.historial[m].monto||0):0),0);
-      return `<div style="flex-shrink:0;background:${total>0?'rgba(34,197,94,.15)':'var(--surface2)'};border:1px solid ${total>0?'rgba(34,197,94,.3)':'var(--border)'};border-radius:12px;padding:10px 14px;text-align:center;min-width:80px">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;margin-bottom:4px">${MESES_CORTO[i]}</div>
-        <div style="font-size:16px;font-weight:800;color:${total>0?'var(--green)':'var(--text3)'}">$${total.toLocaleString()}</div>
+      const isActual=i===mesActIdx;
+      return `<div style="flex-shrink:0;background:${isActual?'rgba(34,197,94,0.15)':total>0?'rgba(10,20,40,0.8)':'rgba(6,13,26,0.5)'};border:1px solid ${isActual?'rgba(34,197,94,0.4)':total>0?'rgba(56,189,248,0.15)':'rgba(56,189,248,0.06)'};border-radius:12px;padding:10px 14px;text-align:center;min-width:76px;${isActual?'box-shadow:0 0 12px rgba(34,197,94,0.2)':''}">
+        <div style="font-size:9px;font-weight:700;color:${isActual?'#86efac':'var(--text3)'};text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">${MESES_CORTO[i]}${isActual?' ●':''}</div>
+        <div style="font-size:15px;font-weight:800;color:${isActual?'#22c55e':total>0?'#38bdf8':'var(--text3)'}">$${total.toLocaleString()}</div>
       </div>`;
     }).join('');
   }
@@ -1928,16 +1939,29 @@ window.renderPagos=function(){
       const pendientes=clientes.filter(p=>getPagoEstado(p)==='pendiente').length;
       const vencidos=clientes.filter(p=>getPagoEstado(p)==='vencido').length;
       const totalMes=clientes.reduce((sum,p)=>sum+(p.historial&&p.historial[mesAct]?Number(p.historial[mesAct].monto||0):0),0);
-      return `<div onclick="abrirZona('${z}')" style="background:var(--surface);margin:0 12px 10px;border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:border-color .15s" onmouseenter="this.style.borderColor='var(--cyan)'" onmouseleave="this.style.borderColor='var(--border)'">
+      const pctPagado=clientes.length>0?Math.round(pagados/clientes.length*100):0;
+      return `<div onclick="abrirZona('${z}')" style="background:rgba(10,20,40,0.8);margin:0 12px 8px;border:1px solid rgba(56,189,248,0.13);border-radius:14px;padding:14px 16px;cursor:pointer;transition:all .18s;backdrop-filter:blur(8px)"
+        onmouseenter="this.style.borderColor='rgba(56,189,248,0.35)';this.style.background='rgba(15,30,55,0.92)'"
+        onmouseleave="this.style.borderColor='rgba(56,189,248,0.13)';this.style.background='rgba(10,20,40,0.8)'">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <span style="font-size:16px;font-weight:700;color:var(--text)">${z}</span>
-          <span style="font-size:13px;font-weight:600;color:var(--cyan)">$${totalMes.toLocaleString()} este mes</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#38bdf8;box-shadow:0 0 6px #38bdf888"></div>
+            <span style="font-size:15px;font-weight:700;color:var(--text)">${z}</span>
+          </div>
+          <span style="font-size:14px;font-weight:800;color:#22c55e">$${totalMes.toLocaleString()}</span>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--blue-bg);color:var(--blue-txt)">${clientes.length} clientes</span>
-          ${pagados>0?`<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--green-bg);color:var(--green-txt)">✓ ${pagados} pagados</span>`:''}
-          ${pendientes>0?`<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--amber-bg);color:var(--amber-txt)">⏳ ${pendientes} pendientes</span>`:''}
-          ${vencidos>0?`<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--red-bg);color:var(--red-txt)">⚠ ${vencidos} vencidos</span>`:''}
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(59,130,246,0.15);color:#93c5fd;border:1px solid rgba(59,130,246,0.25)">${clientes.length} clientes</span>
+          ${pagados>0?`<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(34,197,94,0.15);color:#86efac;border:1px solid rgba(34,197,94,0.25)">✓ ${pagados} pagados</span>`:''}
+          ${pendientes>0?`<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.25)">⏳ ${pendientes} pendientes</span>`:''}
+          ${vencidos>0?`<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.25)">⚠ ${vencidos} vencidos</span>`:''}
+        </div>
+        <div style="height:5px;background:rgba(6,13,26,0.6);border-radius:3px;overflow:hidden;border:1px solid rgba(56,189,248,0.08)">
+          <div style="height:100%;width:${pctPagado}%;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:3px;transition:width .6s;box-shadow:0 0 6px rgba(34,197,94,0.5)"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px">
+          <span style="font-size:9px;color:var(--text3)">${pctPagado}% cobrado</span>
+          <i class="ti ti-chevron-right" style="font-size:13px;color:var(--text3)"></i>
         </div>
       </div>`;
     }).join('');
